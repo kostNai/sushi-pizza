@@ -1,0 +1,21 @@
+* {
+	margin: 0;
+	padding: 0;
+	background: #322c2b;
+	color: #e4c59e;
+}
+html {
+	padding: 0 200px;
+	height: 100vh;
+}
+body {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+a {
+	text-decoration: none;
+}
+main {
+	flex: 1 0 auto;
+}

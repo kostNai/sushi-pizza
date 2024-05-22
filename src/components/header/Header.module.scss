@@ -1,0 +1,20 @@
+.header {
+	margin-top: 16px;
+}
+
+.headerContainer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.menu {
+	display: flex;
+	gap: 32px;
+	align-items: center;
+}
+
+.login {
+	display: flex;
+	gap: 16px;
+}
