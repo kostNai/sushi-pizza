@@ -4,6 +4,7 @@ import './globals.scss'
 import Header from '../components/header/Header'
 import Footer from '../components/footer/Footer'
 import { Providers } from '../components/SessionProvider'
+import { Suspense } from 'react'
 
 const montserrat = Montserrat({
 	weight: ['100', '400', '700'],

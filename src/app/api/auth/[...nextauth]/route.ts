@@ -18,16 +18,9 @@ const handler = NextAuth({
 					}),
 					headers: { 'Content-Type': 'application/json' }
 				})
-				console.log(`res.status - ${res.body}`)
 
 				const result = await res.json()
-				console.log(result)
-
-				const user = result.user
-				console.log(user)
-
 				const data = { token: result.access_token, user: result.user }
-				console.log(data)
 
 				if (result.status) {
 					return data

@@ -1,9 +1,19 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 
 import styles from './Header.module.scss'
+import { useEffect, useState } from 'react'
+import { signOut, useSession } from 'next-auth/react'
 
 export default function Header() {
+	const [user, setUser] = useState(undefined)
+	const session = useSession()
+	useEffect(() => {
+		setUser(session.data?.user)
+		console.log(session)
+	}, [session, user])
 	return (
 		<header className={styles.header}>
 			<div className={styles.headerContainer}>
@@ -16,10 +26,28 @@ export default function Header() {
 					<Link href={'/about'}>Про нас</Link>
 					<Link href={'/contacts'}>Зв&apos;язатися з нами</Link>
 				</nav>
-				<div className={styles.login}>
-					<Link href={'login'}>Вхід</Link>
-					<Link href={'register'}>Реєстрація</Link>
-				</div>
+				{!user?.user ? (
+					<div className={styles.login}>
+						<Link href={'api/auth/signin'}>Вхід</Link>
+						<Link href={'register'}>Реєстрація</Link>
+					</div>
+				) : (
+					<div>
+						Привіт,{' '}
+						<Link href={'/profile'} className={styles.userLink}>
+							{user?.user.login}
+						</Link>
+						<div>
+							<Link
+								href={'/'}
+								className={styles.signOutLink}
+								onClick={() => signOut()}
+							>
+								Вихід
+							</Link>
+						</div>
+					</div>
+				)}
 			</div>
 		</header>
 	)
