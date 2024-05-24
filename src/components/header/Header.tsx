@@ -12,7 +12,6 @@ export default function Header() {
 	const session = useSession()
 	useEffect(() => {
 		setUser(session.data?.user)
-		console.log(session)
 	}, [session, user])
 	return (
 		<header className={styles.header}>

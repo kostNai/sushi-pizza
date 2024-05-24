@@ -1,0 +1,35 @@
+.active {
+	color: #803d3b;
+}
+.rootLayout {
+	border: solid 1px #ffff;
+	display: grid;
+	grid-template-columns: 25% 75%;
+	height: 100%;
+
+	section {
+		border: solid 1px #ffff;
+		height: 100%;
+	}
+}
+.rootMenu {
+	margin-top: 8px;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+.rootList {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	li {
+		list-style: none;
+		font-size: 24px;
+		transition: 300ms;
+		&:hover {
+			scale: 1.1;
+		}
+	}
+}
