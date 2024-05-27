@@ -11,7 +11,7 @@ export default function Header() {
 	const [user, setUser] = useState(undefined)
 	const session = useSession()
 	useEffect(() => {
-		setUser(session.data?.user)
+		setUser(session.data)
 	}, [session, user])
 	return (
 		<header className={styles.header}>

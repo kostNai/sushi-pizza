@@ -20,10 +20,12 @@ const handler = NextAuth({
 				})
 
 				const result = await res.json()
-				const data = { token: result.access_token, user: result.user }
+				const user = { ...result.user, token: result.access_token }
+
+				// const data = { token: result.access_token, user: result.user }
 
 				if (result.status) {
-					return data
+					return user
 				} else {
 					throw new Error(
 						JSON.stringify({ errors: result.message, status: false })

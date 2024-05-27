@@ -4,3 +4,31 @@
 .profileMain {
 	padding: 10px;
 }
+.profileContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	margin-left: 64px;
+}
+.changeContainer {
+	display: flex;
+	div {
+		display: flex;
+		gap: 32px;
+	}
+}
+.changeBtn {
+	font-size: 12px;
+	padding: 2px 8px;
+	box-shadow: #e4c59e 0px 1px 3px 0px, #e4c59e 0px 0px 0px 1px;
+	border: none;
+	border-radius: 2px;
+	transition: 300ms;
+	cursor: pointer;
+	&:active {
+		scale: 0.9;
+	}
+	&:hover {
+		box-shadow: #e4c59e 0px 1px 3px 3px, #e4c59e 0px 0px 0px 1px;
+	}
+}

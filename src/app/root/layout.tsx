@@ -16,6 +16,7 @@ export default function RootUserLayout({
 
 	const [data, setData] = useState(null)
 	const [token, setToken] = useState<string | undefined>('')
+	const [role, setRole] = useState<string | undefined>('')
 
 	const session = useSession()
 
@@ -24,46 +25,53 @@ export default function RootUserLayout({
 			setData(session?.data?.user)
 			setToken(data?.token)
 		}
-	}, [data, session, token])
-	if (!token) {
-		return null
-	}
-	const decoded = jwtDecode<JwtPayload>(token!)
-	const role = decoded.role
+		if (session.status === 'unauthenticated') {
+			redirect('/')
+		}
+		if (token) {
+			const decoded = jwtDecode<JwtPayload>(token!)
+			setRole(decoded.role)
+		}
+		if (role) {
+			if (role !== 'root') {
+				redirect('/')
+			}
+		}
+	}, [data, session, token, role])
 
-	return role === 'root' ? (
-		<section className={styles.rootLayout}>
-			<nav className={styles.rootMenu}>
-				<ul className={styles.rootList}>
-					<li>
-						<Link
-							href={`/root/profile`}
-							className={path === '/root/profile' ? `${styles.active}` : ''}
-						>
-							Профіль
-						</Link>
-					</li>
-					<li>
-						<Link
-							href={`/root/users`}
-							className={path === '/root/users' ? `${styles.active}` : ''}
-						>
-							Користувачі
-						</Link>
-					</li>
-					<li>
-						<Link
-							href={`/root/products`}
-							className={path === '/root/products' ? `${styles.active}` : ''}
-						>
-							Продукти
-						</Link>
-					</li>
-				</ul>
-			</nav>
-			<section>{children}</section>
-		</section>
-	) : (
-		redirect('/')
+	return (
+		role === 'root' && (
+			<section className={styles.rootLayout}>
+				<nav className={styles.rootMenu}>
+					<ul className={styles.rootList}>
+						<li>
+							<Link
+								href={`/root/profile`}
+								className={path === '/root/profile' ? `${styles.active}` : ''}
+							>
+								Профіль
+							</Link>
+						</li>
+						<li>
+							<Link
+								href={`/root/users`}
+								className={path === '/root/users' ? `${styles.active}` : ''}
+							>
+								Користувачі
+							</Link>
+						</li>
+						<li>
+							<Link
+								href={`/root/products`}
+								className={path === '/root/products' ? `${styles.active}` : ''}
+							>
+								Продукти
+							</Link>
+						</li>
+					</ul>
+				</nav>
+				<section>{children}</section>
+			</section>
+		)
 	)
 }
