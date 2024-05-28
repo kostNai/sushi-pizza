@@ -6,5 +6,5 @@ export type User = {
 	password?: string
 	token?: string
 	phone_number?: string
-	role?: string
+	role_id?: string
 }

@@ -1,0 +1,42 @@
+.users {
+	padding: 16px;
+}
+.usersTable {
+	width: 100%;
+	border-collapse: collapse;
+
+	td,
+	th {
+		border: 1px solid #dddddd;
+		border-spacing: 0px;
+		text-align: center;
+		padding: 8px;
+	}
+}
+.actions {
+	display: flex;
+	gap: 16px;
+	justify-content: center;
+}
+
+.btn {
+	border: none;
+	border-radius: 5px;
+	font-size: 14px;
+	padding: 4px 8px;
+	color: #ffff;
+	cursor: pointer;
+	transition: 300ms;
+	&:hover {
+		box-shadow: #e4c59e 0px 1px 3px 0px, #e4c59e 0px 0px 0px 1px;
+	}
+	&:active {
+		scale: 0.9;
+	}
+}
+.btnEdit {
+	background: rgb(136, 194, 44);
+}
+.btnDelete {
+	background: rgb(160, 46, 26);
+}
