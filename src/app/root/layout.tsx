@@ -14,30 +14,16 @@ export default function RootUserLayout({
 }>) {
 	const path = usePathname()
 
-	const [data, setData] = useState(null)
-	const [token, setToken] = useState<string | undefined>('')
 	const [role, setRole] = useState<string | undefined>('')
 
-	const session = useSession()
-
 	useEffect(() => {
-		if (session.status === 'authenticated') {
-			setData(session?.data?.user)
-			setToken(data?.token)
-		}
-		if (session.status === 'unauthenticated') {
-			redirect('/')
-		}
+		const token = localStorage.getItem('token')
 		if (token) {
-			const decoded = jwtDecode<JwtPayload>(token!)
-			setRole(decoded.role)
+			const arrayToken = token.split('.')
+			const tokenPayload = JSON.parse(atob(arrayToken[1]))
+			setRole(tokenPayload.role)
 		}
-		if (role) {
-			if (role !== 'root') {
-				redirect('/')
-			}
-		}
-	}, [data, session, token, role])
+	}, [])
 
 	return (
 		role === 'root' && (

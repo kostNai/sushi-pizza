@@ -5,5 +5,6 @@ export const login = async (login: string, password: string) => {
 		login,
 		password
 	})
+
 	return res
 }

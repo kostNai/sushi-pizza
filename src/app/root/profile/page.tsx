@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { FormEvent, useEffect, useState } from 'react'
 import styles from './styles.module.scss'
-import { editRootUser } from '../../../utils/editRootUser'
+import { editRootUser } from '../../../utils/api/editRootUser'
 import { User } from '../../types/User'
 import EditUserForm from '../../../components/editUserForm/EditUserForm'
 

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { User } from '../app/types/User'
+import { User } from '../../app/types/User'
 
 export const editRootUser = async (user: User, token: string) => {
 	const res = await axios.patch(

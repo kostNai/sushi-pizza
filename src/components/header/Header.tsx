@@ -2,17 +2,32 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 import styles from './Header.module.scss'
-import { useEffect, useState } from 'react'
-import { signOut, useSession } from 'next-auth/react'
+import { logout } from '../../utils/api/logout'
+import { useUserContext } from '../../context/userContext'
 
 export default function Header() {
-	const [user, setUser] = useState(undefined)
-	const session = useSession()
+	const [token, setToken] = useState<string | undefined>('')
+
+	const [loginContext, setLoginContext] = useUserContext()
+	if (loginContext) console.log(`constext - ${loginContext}`)
+
+	const router = useRouter()
+
 	useEffect(() => {
-		setUser(session.data)
-	}, [session, user])
+		setToken(localStorage.getItem('token'))
+	}, [])
+
+	const logoutHandler = async () => {
+		const res = await logout(token)
+		localStorage.removeItem('token')
+		setLoginContext('')
+		router.push('/')
+		return res
+	}
 	return (
 		<header className={styles.header}>
 			<div className={styles.headerContainer}>
@@ -25,22 +40,22 @@ export default function Header() {
 					<Link href={'/about'}>Про нас</Link>
 					<Link href={'/contacts'}>Зв&apos;язатися з нами</Link>
 				</nav>
-				{!user?.user ? (
+				{!loginContext ? (
 					<div className={styles.login}>
-						<Link href={'api/auth/signin'}>Вхід</Link>
-						<Link href={'register'}>Реєстрація</Link>
+						<Link href={'/login'}>Вхід</Link>
+						<Link href={'/register'}>Реєстрація</Link>
 					</div>
 				) : (
 					<div>
 						Привіт,{' '}
 						<Link href={'/profile'} className={styles.userLink}>
-							{user?.user.login}
+							{loginContext}
 						</Link>
 						<div>
 							<Link
 								href={'/'}
 								className={styles.signOutLink}
-								onClick={() => signOut()}
+								onClick={logoutHandler}
 							>
 								Вихід
 							</Link>

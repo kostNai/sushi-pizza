@@ -5,6 +5,7 @@ import Header from '../components/header/Header'
 import Footer from '../components/footer/Footer'
 import { Providers } from '../components/SessionProvider'
 import { Suspense } from 'react'
+import { AppWrapper } from '../context/userContext'
 
 const montserrat = Montserrat({
 	weight: ['100', '400', '700'],
@@ -27,9 +28,11 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={montserrat.className}>
 				<Providers>
-					<Header />
-					<main>{children}</main>
-					<Footer />
+					<AppWrapper>
+						<Header />
+						<main>{children}</main>
+						<Footer />
+					</AppWrapper>
 				</Providers>
 			</body>
 		</html>
