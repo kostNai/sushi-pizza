@@ -11,18 +11,22 @@ import { useUserContext } from '../../context/userContext'
 
 export default function Header() {
 	const [token, setToken] = useState<string | undefined>('')
-
 	const [loginContext, setLoginContext] = useUserContext()
-	if (loginContext) console.log(`constext - ${loginContext}`)
-
 	const router = useRouter()
 
 	useEffect(() => {
 		setToken(localStorage.getItem('token'))
-	}, [])
+		if (token) {
+			const arrayToken = token.split('.')
+			const payload = JSON.parse(atob(arrayToken[1]))
+			setLoginContext(payload.login)
+		}
+	}, [token, setLoginContext])
 
 	const logoutHandler = async () => {
 		const res = await logout(token)
+		console.log(res.data)
+
 		localStorage.removeItem('token')
 		setLoginContext('')
 		router.push('/')

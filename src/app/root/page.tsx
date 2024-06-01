@@ -1,11 +1,13 @@
 'use client'
 
-import { redirect } from 'next/navigation'
+import { useUserContext } from '../../context/userContext'
 
 export default function RootPage() {
+	const [loginContext, setLoginContext] = useUserContext()
+
 	return (
 		<section>
-			<div>Hello,, role</div>
+			<div>Привіт, {loginContext}</div>
 		</section>
 	)
 }

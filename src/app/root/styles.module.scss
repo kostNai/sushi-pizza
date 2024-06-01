@@ -33,3 +33,19 @@
 		}
 	}
 }
+
+.loading {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 100px;
+	height: 100px;
+	animation: 5s linear 0s infinite alternate spin;
+}
+
+@keyframes spin {
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}

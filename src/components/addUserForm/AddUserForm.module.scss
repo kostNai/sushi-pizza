@@ -1,0 +1,76 @@
+.addNewUser {
+	cursor: pointer;
+}
+.addUserContainer {
+	width: fit-content;
+	margin: 32px 4px;
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 32px;
+	border-radius: 5px;
+	transition: 300ms;
+	scale: 1;
+	flex: 0 0 45%;
+}
+.hiddenForm {
+	transition: 300ms;
+	scale: 0;
+}
+.newUserForm {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 0 16px;
+	justify-content: center;
+	transition: 300ms;
+
+	label {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+}
+
+.newUserInput {
+	outline: none;
+	border: none;
+	margin-left: 8px;
+	font-size: 16px;
+	padding: 4px 16px;
+	box-shadow: #e4c59e 0px 1px 3px 0px, #e4c59e 0px 0px 0px 1px;
+	border-radius: 5px;
+	&:focus {
+		outline: none;
+		box-shadow: #e4c59e 0px 1px 3px 4px, #e4c59e 0px 0px 0px 1px;
+	}
+}
+.btns {
+	margin-top: 8px;
+	display: flex;
+	gap: 8px;
+	justify-content: center;
+}
+.newUserSuccessBtn {
+	background: rgb(136, 194, 44);
+}
+.newUserCancelBtn {
+	background: rgb(160, 46, 26);
+}
+.btn {
+	border: none;
+	border-radius: 5px;
+	font-size: 14px;
+	padding: 4px 8px;
+	color: #ffff;
+	cursor: pointer;
+	transition: 300ms;
+	&:hover {
+		box-shadow: #e4c59e 0px 1px 3px 0px, #e4c59e 0px 0px 0px 1px;
+	}
+	&:active {
+		scale: 0.9;
+	}
+}

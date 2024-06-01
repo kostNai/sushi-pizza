@@ -1,28 +1,32 @@
 'use client'
-import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { FormEvent, useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import { editRootUser } from '../../../utils/api/editRootUser'
 import { User } from '../../types/User'
 import EditUserForm from '../../../components/editUserForm/EditUserForm'
+import { refresh } from '../../../utils/api/refresh'
 
 export default function RootProfile() {
-	const { data: session, status, update } = useSession()
-	const [userData, setUserData] = useState(null)
+	const [token, setToken] = useState<string | undefined>('')
 	const [isEdit, setIsEdit] = useState<boolean | undefined>(false)
 	const [version, setVersion] = useState<number | undefined>(0)
 	const [name, setName] = useState<string | undefined>('')
+	const [payload, setPayload] = useState<User | undefined>(null)
 	const [user, setUser] = useState<User | undefined>({
+		login: '',
 		name: '',
 		email: '',
 		phone_number: ''
 	})
 
 	useEffect(() => {
-		if (status === 'authenticated') setUserData(session.user)
-		console.log(session)
-	}, [session, status, version])
+		setToken(localStorage.getItem('token'))
+		if (token) {
+			const arrayToken = token.split('.')
+			setPayload(JSON.parse(atob(arrayToken[1])))
+		}
+	}, [token, version])
 
 	const onChangeHandler = (
 		e: React.ChangeEvent<HTMLInputElement>,
@@ -35,19 +39,20 @@ export default function RootProfile() {
 	const editUser = async (e: FormEvent) => {
 		e.preventDefault()
 
-		const token: string = userData?.token
-
-		await editRootUser(user, token).then((data) => {
-			if (data.status === 200) {
-				update({ user: user })
-				setVersion(version + 1)
-				setIsEdit(false)
-			}
-		})
+		if (token) {
+			await editRootUser(user, token).then((data) => {
+				if (data.status === 200) {
+					refresh(token).then((data) => {
+						localStorage.setItem('token', data.data.access_token)
+						setVersion(version + 1)
+					})
+					setIsEdit(false)
+				}
+			})
+		}
 	}
 
 	const cancelHandler = () => {
-		setName('')
 		setUser({ ...user, name: '', email: '', phone_number: '' })
 		setIsEdit(false)
 	}
@@ -62,12 +67,12 @@ export default function RootProfile() {
 					priority
 					className={styles.profileImg}
 				/>
-				<p>Логін - {userData?.login}</p>
+				<p>Логін - {payload?.login}</p>
 				<div className={styles.changeContainer}>
 					<p>Email - </p>
-					{userData?.email ? (
+					{payload?.email ? (
 						<div>
-							{userData?.email}
+							{payload?.email}
 							<button
 								onClick={() => {
 									setIsEdit(true)
@@ -79,14 +84,19 @@ export default function RootProfile() {
 							</button>
 						</div>
 					) : (
-						<button onClick={() => setIsEdit(true)}>Додати інформацію</button>
+						<button
+							onClick={() => setIsEdit(true)}
+							className={styles.changeBtn}
+						>
+							Додати інформацію
+						</button>
 					)}
 				</div>
 				<div className={styles.changeContainer}>
 					<p>Ім&apos;я - </p>
-					{userData?.name ? (
+					{payload?.name ? (
 						<div>
-							{userData?.name}
+							{payload?.name}
 							<button
 								onClick={() => {
 									setIsEdit(true)
@@ -98,14 +108,19 @@ export default function RootProfile() {
 							</button>
 						</div>
 					) : (
-						<button onClick={() => setIsEdit(true)}>Додати інформацію</button>
+						<button
+							onClick={() => setIsEdit(true)}
+							className={styles.changeBtn}
+						>
+							Додати інформацію
+						</button>
 					)}
 				</div>
 				<div className={styles.changeContainer}>
 					<p>Номер телефону - </p>
-					{userData?.phone_number ? (
+					{payload?.phone_number ? (
 						<div>
-							<p>{userData?.phone_number}</p>
+							<p>{payload?.phone_number}</p>
 							<button
 								onClick={() => {
 									setIsEdit(true)
@@ -117,7 +132,7 @@ export default function RootProfile() {
 							</button>
 						</div>
 					) : (
-						<button>Додати інформацію</button>
+						<button className={styles.changeBtn}>Додати інформацію</button>
 					)}
 				</div>
 				{isEdit && (

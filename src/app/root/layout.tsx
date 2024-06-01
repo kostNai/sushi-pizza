@@ -2,10 +2,8 @@
 
 import Link from 'next/link'
 import styles from './styles.module.scss'
-import { redirect, usePathname } from 'next/navigation'
-import { useSession } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { JwtPayload, jwtDecode } from 'jwt-decode'
 
 export default function RootUserLayout({
 	children

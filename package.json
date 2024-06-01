@@ -9,12 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-icons/all-files": "^4.1.0",
     "axios": "^1.7.1",
     "jwt-decode": "^4.0.0",
     "next": "14.2.3",
     "next-auth": "^4.24.7",
     "react": "^18",
     "react-dom": "^18",
+    "react-icons": "^5.2.1",
     "sass": "^1.77.2"
   },
   "devDependencies": {

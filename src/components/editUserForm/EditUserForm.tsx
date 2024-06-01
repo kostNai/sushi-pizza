@@ -1,6 +1,5 @@
 import { FormEvent } from 'react'
 import styles from './EditUserForm.module.scss'
-import { User } from '../../app/types/User'
 
 type Props = {
 	onSubmit: (e: FormEvent) => Promise<void>

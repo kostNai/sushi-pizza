@@ -1,17 +1,8 @@
 'use client'
-
-import { useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { useUserContext } from '../../context/userContext'
 
 export default function Profile() {
-	const session = useSession()
-	const [user, setUser] = useState(null)
+	const [loginContext, setLoginContext] = useUserContext()
 
-	useEffect(() => {
-		if (session.status === 'authenticated') {
-			setUser(session.data?.user)
-		}
-	}, [session, user])
-
-	return <section>{user?.user && <div>{user.user.login}</div>}</section>
+	return <section>{loginContext && <div>{loginContext}</div>}</section>
 }

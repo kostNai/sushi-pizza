@@ -3,7 +3,6 @@ import { Montserrat } from 'next/font/google'
 import './globals.scss'
 import Header from '../components/header/Header'
 import Footer from '../components/footer/Footer'
-import { Providers } from '../components/SessionProvider'
 import { Suspense } from 'react'
 import { AppWrapper } from '../context/userContext'
 
@@ -27,13 +26,11 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={montserrat.className}>
-				<Providers>
-					<AppWrapper>
-						<Header />
-						<main>{children}</main>
-						<Footer />
-					</AppWrapper>
-				</Providers>
+				<AppWrapper>
+					<Header />
+					<main>{children}</main>
+					<Footer />
+				</AppWrapper>
 			</body>
 		</html>
 	)
