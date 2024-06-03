@@ -4,15 +4,19 @@ import styles from './AddNewRole.module.scss'
 type Props = {
 	isAddingRole: boolean
 	onClickTitle: () => void
-	onClickBtnSuccess: () => void
+	onSubmit: (e: FormEvent) => void
 	onClickBtnReset: (e: FormEvent) => void
+	value: string
+	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export default function AddNewRole({
 	isAddingRole,
 	onClickTitle,
-	onClickBtnSuccess,
-	onClickBtnReset
+	onSubmit,
+	onClickBtnReset,
+	value,
+	onChange
 }: Props) {
 	return (
 		<div className={styles.newRoleContainer}>
@@ -20,7 +24,10 @@ export default function AddNewRole({
 				Додати нову роль
 			</h3>
 
-			<form className={isAddingRole ? styles.newRoleForm : styles.hiddenForm}>
+			<form
+				className={isAddingRole ? styles.newRoleForm : styles.hiddenForm}
+				onSubmit={onSubmit}
+			>
 				<label htmlFor="role">
 					Введіть назву ролі
 					<input
@@ -28,13 +35,14 @@ export default function AddNewRole({
 						placeholder="Нова роль"
 						name="role"
 						className={styles.newRoleInput}
+						value={value}
+						onChange={onChange}
 					/>
 				</label>
 				<div className={styles.btns}>
 					<button
 						className={`${styles.btn} ${styles.newRoleSuccessBtn} ${styles.newRoleBtn}`}
 						type="submit"
-						onClick={onClickBtnSuccess}
 					>
 						Підтвердити
 					</button>

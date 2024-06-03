@@ -1,0 +1,21 @@
+.newProductLink {
+	width: fit-content;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 4px;
+	margin: 32px 8px;
+	transition: 300ms;
+	&:hover {
+		text-decoration: underline;
+	}
+}
+.newProductIcon {
+	width: 24px;
+	height: 24px;
+	transition: 300ms;
+	&:hover {
+		text-decoration: underline;
+		scale: 1.3;
+	}
+}

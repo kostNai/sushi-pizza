@@ -1,19 +1,20 @@
 'use client'
 
+import { FormEvent, Suspense, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { getUsers } from '../../../utils/api/getUsers'
 import styles from './styles.module.scss'
-import { FormEvent, Suspense, useEffect, useState } from 'react'
 import { User } from '../../types/User'
 import { deleteUser } from '../../../utils/api/deleteUser'
 import { getRoles } from '../../../utils/api/getRoles'
 import { Role } from '../../types/Role'
-import { useRouter } from 'next/navigation'
-import Loading from '../loading'
 import { changeRole } from '../../../utils/api/changeRole'
 import EditRoleRadio from '../../../components/editRoleRadio/EditRoleRadio'
 import AddNewRole from '../../../components/addNewRole/AddNewRole'
 import AddUserForm from '../../../components/addUserForm/AddUserForm'
 import { addNewUser } from '../../../utils/api/addUser'
+import { addNewRole } from '../../../utils/api/addNewRole'
+import { refresh } from '../../../utils/api/refresh'
 
 export default function RootUsers() {
 	const [users, setUsers] = useState<User[] | undefined>([])
@@ -31,6 +32,7 @@ export default function RootUsers() {
 		password: '',
 		phone_number: ''
 	})
+	const [newRole, setNewRole] = useState<string | undefined>('')
 
 	const router = useRouter()
 	useEffect(() => {
@@ -70,11 +72,11 @@ export default function RootUsers() {
 
 		return found?.role_name
 	}
-	const getRoleName = () => {
-		const arrayToken = token.split('.')
-		const tokenPayload = JSON.parse(atob(arrayToken[1]))
-		console.log(tokenPayload.role)
-	}
+	// const getRoleName = () => {
+	// 	const arrayToken = token.split('.')
+	// 	const tokenPayload = JSON.parse(atob(arrayToken[1]))
+	// 	console.log(tokenPayload.role)
+	// }
 
 	const changeRoleHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		setChangedRole(e.target.value)
@@ -114,11 +116,27 @@ export default function RootUsers() {
 		e.preventDefault()
 		setIsAddingUser(false)
 	}
+
+	const addnewRoleHandler = async (e: FormEvent, newRole: string) => {
+		e.preventDefault()
+		const res = await addNewRole(token, newRole)
+		if (res.status === 200) {
+			refresh(token).then((data) => {
+				localStorage.setItem('token', data.data.access_token)
+			})
+			setVersion(version + 1)
+			setNewRole('')
+		}
+	}
+	// const sortedList = async(users:User[],sortedParam:string)=>{
+	// 	const res = users.filter((user:User)=>Object)
+	// }
 	return (
 		users && (
 			<div>
 				<section className={styles.users}>
 					<div>
+						<button>Click</button>
 						<table className={styles.usersTable}>
 							<thead>
 								<tr>
@@ -173,7 +191,13 @@ export default function RootUsers() {
 								isAddingRole={isAddingRole}
 								onClickBtnReset={cancelAddingRoleHandler}
 								onClickTitle={() => setIsAddingRole(true)}
-								onClickBtnSuccess={() => {}}
+								value={newRole}
+								onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+									setNewRole(e.target.value)
+								}
+								onSubmit={(e) => {
+									addnewRoleHandler(e, newRole)
+								}}
 							/>
 							<AddUserForm
 								user={user}
