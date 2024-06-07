@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEvent, Suspense, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getUsers } from '../../../utils/api/getUsers'
 import styles from './styles.module.scss'
@@ -50,33 +50,10 @@ export default function RootUsers() {
 			})
 		}
 	}, [token, version, router])
-	useEffect(() => {
-		if (token) {
-			const res = getRoles(token)
-				.then((data) => {
-					setRoles(data.data.roles)
-				})
-				.catch((error) => {
-					if (error.response.status !== 200) {
-					}
-				})
-		}
-	}, [token, version])
 	const deleteUserHandler = async (id: string) => {
 		const res = await deleteUser(id, token)
 		setVersion(version + 1)
 	}
-
-	const roleName = (roles: Role[], indx: string): string => {
-		const found = roles.find((role: Role) => role.user_id === indx)
-
-		return found?.role_name
-	}
-	// const getRoleName = () => {
-	// 	const arrayToken = token.split('.')
-	// 	const tokenPayload = JSON.parse(atob(arrayToken[1]))
-	// 	console.log(tokenPayload.role)
-	// }
 
 	const changeRoleHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		setChangedRole(e.target.value)
@@ -128,9 +105,6 @@ export default function RootUsers() {
 			setNewRole('')
 		}
 	}
-	// const sortedList = async(users:User[],sortedParam:string)=>{
-	// 	const res = users.filter((user:User)=>Object)
-	// }
 	return (
 		users && (
 			<div>
@@ -155,7 +129,7 @@ export default function RootUsers() {
 										<td>{user.name}</td>
 										<td>{user.login}</td>
 										<td>{user.phone_number}</td>
-										<td>{roles.length ? roleName(roles, user.id) : ''}</td>
+										<td>{user.role.role_name}</td>
 										<td>
 											<div className={styles.actions}>
 												<button

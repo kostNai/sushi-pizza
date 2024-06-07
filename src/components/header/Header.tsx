@@ -19,9 +19,15 @@ export default function Header() {
 		if (token) {
 			const arrayToken = token.split('.')
 			const payload = JSON.parse(atob(arrayToken[1]))
+			const expired = payload.exp - Date.now() / 1000
+			if (expired <= 0) {
+				localStorage.removeItem('token')
+				setLoginContext('')
+				router.push('/login')
+			}
 			setLoginContext(payload.login)
 		}
-	}, [token, setLoginContext])
+	}, [token, setLoginContext, router])
 
 	const logoutHandler = async () => {
 		const res = await logout(token)

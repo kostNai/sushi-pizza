@@ -1,3 +1,5 @@
+import { Role } from './Role'
+
 export type User = {
 	id?: string
 	name?: string
@@ -7,4 +9,5 @@ export type User = {
 	token?: string
 	phone_number?: string
 	role_id?: string
+	role?: Role
 }

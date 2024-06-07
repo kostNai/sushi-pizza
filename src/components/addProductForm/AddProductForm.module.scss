@@ -16,6 +16,21 @@
 	justify-content: center;
 	align-items: flex-start;
 }
+
+.input,
+.textArea {
+	font-size: 20px;
+	padding: 4px 8px;
+	border: none;
+	border-radius: 5px;
+	outline: none;
+	box-shadow: #e4c59e 0px 1px 3px 0px, #e4c59e 0px 0px 0px 1px;
+	border-radius: 5px;
+	&:focus {
+		outline: none;
+		box-shadow: #e4c59e 0px 1px 3px 4px, #e4c59e 0px 0px 0px 1px;
+	}
+}
 .addProductInputs {
 	display: flex;
 	flex-direction: column;
@@ -27,26 +42,13 @@
 		flex-direction: column;
 		gap: 4px;
 
-		input,
-		textarea {
-			font-size: 20px;
-			padding: 4px 8px;
-			border: none;
-			border-radius: 5px;
-			outline: none;
-			box-shadow: #e4c59e 0px 1px 3px 0px, #e4c59e 0px 0px 0px 1px;
-			border-radius: 5px;
-			&:focus {
-				outline: none;
-				box-shadow: #e4c59e 0px 1px 3px 4px, #e4c59e 0px 0px 0px 1px;
-			}
-		}
 		textarea {
 			height: 100px;
 			resize: none;
 		}
 	}
 }
+
 .fileINput {
 	font-size: 14px;
 }
@@ -76,5 +78,17 @@
 	}
 	&:active {
 		scale: 0.9;
+	}
+}
+.radioContainer {
+	display: flex;
+	flex-direction: column;
+	h2 {
+		margin: 16px 0;
+	}
+	label {
+		display: flex;
+		flex-direction: row;
+		gap: 4px;
 	}
 }
