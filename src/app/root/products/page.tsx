@@ -10,6 +10,8 @@ import { getProducts } from '../../../utils/api/getProducts'
 import { Product } from '../../types/Product'
 import { refresh } from '../../../utils/api/refresh'
 import { deleteProduct } from '../../../utils/api/deleteProduct'
+import Loading from '../loading'
+import EditProductForm from '../../../components/editProductForm/EditProductForm'
 
 export default function RootProducts() {
 	const [products, setProducts] = useState<Product[] | undefined>([])
@@ -25,10 +27,6 @@ export default function RootProducts() {
 			)
 		})
 	}, [token, version])
-	const deleteProductHandler = async (id: string) => {
-		const res = await deleteProduct(token, id)
-	}
-	const editProductHandler = () => {}
 
 	return (
 		<div>
@@ -37,10 +35,9 @@ export default function RootProducts() {
 					<IoAdd className={styles.newProductIcon} />
 					Додати новий продукт
 				</Link>
-				<Suspense>
+				<Suspense fallback={<Loading />}>
 					<ProductTable
 						products={products}
-						editProduct={editProductHandler}
 						version={version}
 						setVersion={setVersion}
 					/>
