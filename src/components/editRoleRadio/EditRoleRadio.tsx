@@ -57,28 +57,3 @@ export default function EditRoleRadio({
 		</div>
 	)
 }
-
-{
-	/* 
-					<label>
-						<input
-							type="radio"
-							name="role"
-							id=""
-							value={'admin'}
-							onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange}
-						/>
-						Admin
-					</label>
-
-					<label>
-						<input
-							type="radio"
-							name="role"
-							id=""
-							value={'user'}
-							onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange}
-						/>
-						User
-					</label> */
-}

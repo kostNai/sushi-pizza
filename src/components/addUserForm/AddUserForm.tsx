@@ -49,6 +49,7 @@ export default function AddUserForm({
 				<label htmlFor="password">
 					Пароль
 					<input
+						type="password"
 						name="password"
 						value={user.password}
 						onChange={onChangeHandler}

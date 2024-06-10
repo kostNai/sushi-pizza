@@ -9,4 +9,5 @@ export type Product = {
 	product_image?: string
 	sale_count?: number
 	category?: Category
+	category_name?: string
 }

@@ -9,6 +9,7 @@ type Props = {
 	onChangeTextArea: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
 	onSubmit: (e: FormEvent) => void
 	categoryOptions: Category[]
+	onReset: () => void
 }
 
 const AddProductForm = ({
@@ -16,12 +17,22 @@ const AddProductForm = ({
 	onChangeInput,
 	onSubmit,
 	onChangeTextArea,
-	categoryOptions
+	categoryOptions,
+	onReset
 }: Props) => {
+	const filteredOptions = categoryOptions.map((e) => e.category_name)
+
+	const filteredCategories = filteredOptions.filter(
+		(e, i) => filteredOptions.indexOf(e) === i
+	)
 	return (
 		<div className={styles.addProductContainer}>
 			<h3>Додати новий продукт</h3>
-			<form className={styles.addProductForm} onSubmit={onSubmit}>
+			<form
+				className={styles.addProductForm}
+				onSubmit={onSubmit}
+				onReset={onReset}
+			>
 				<div className={styles.addProductInputs}>
 					<label htmlFor="product_name">
 						Назва продукту
@@ -75,17 +86,22 @@ const AddProductForm = ({
 						Оберіть картинку
 						<input
 							type="file"
-							name="product_image
-							"
+							name="product_image"
+							onChange={onChangeInput}
 							className={`${styles.fileINput} ${styles.input}`}
 						/>
 					</label>
 					<div className={styles.radioContainer}>
-						<h2>Оберіть категорію</h2>
-						{categoryOptions.map((category: Category) => (
-							<label htmlFor="category" key={category.id}>
-								<input type="radio" name="category" />
-								{category.category_name}
+						<h4>Оберіть категорію</h4>
+						{filteredCategories.map((category: string, indx) => (
+							<label htmlFor="category_name" key={indx}>
+								<input
+									type="radio"
+									name="category_name"
+									onChange={onChangeInput}
+									value={category}
+								/>
+								{category}
 							</label>
 						))}
 					</div>

@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react'
+import 'react-toastify/dist/ReactToastify.css'
 import { Product } from '../../app/types/Product'
 import { deleteProduct } from '../../utils/api/deleteProduct'
 import styles from './ProductsTable.module.scss'
@@ -21,7 +22,9 @@ const ProductTable = ({ products, version, setVersion }: Props) => {
 		product_weight: 0,
 		product_image: ''
 	})
+
 	const [productId, setProductId] = useState<string | undefined>('')
+
 	const token = localStorage.getItem('token')
 	const deleteProductHandler = (id: string) => {
 		setIsLoading(true)

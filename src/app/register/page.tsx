@@ -17,7 +17,7 @@ export default function Register() {
 				</form>
 			</div>
 			<p>Вже маєте профіль?</p>
-			<Link href={'/register'} className={styles.loginLink}>
+			<Link href={'/login'} className={styles.loginLink}>
 				{' '}
 				Увійти
 			</Link>

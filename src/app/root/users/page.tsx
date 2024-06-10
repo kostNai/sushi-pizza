@@ -2,8 +2,10 @@
 
 import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { getUsers } from '../../../utils/api/getUsers'
+import 'react-toastify/dist/ReactToastify.css'
+
 import styles from './styles.module.scss'
+import { getUsers } from '../../../utils/api/getUsers'
 import { User } from '../../types/User'
 import { deleteUser } from '../../../utils/api/deleteUser'
 import { getRoles } from '../../../utils/api/getRoles'
@@ -28,13 +30,14 @@ export default function RootUsers() {
 	const [isAddingUser, setIsAddingUser] = useState<boolean | undefined>(false)
 	const [user, setUser] = useState<User | undefined>({
 		login: '',
-		name: '',
+		email: '',
 		password: '',
 		phone_number: ''
 	})
 	const [newRole, setNewRole] = useState<string | undefined>('')
 
 	const router = useRouter()
+
 	useEffect(() => {
 		setToken(localStorage.getItem('token'))
 
@@ -50,6 +53,13 @@ export default function RootUsers() {
 			})
 		}
 	}, [token, version, router])
+	useEffect(() => {
+		if (token) {
+			const res = getRoles(token).then((data) => {
+				setRoles(data.data.roles)
+			})
+		}
+	}, [token])
 	const deleteUserHandler = async (id: string) => {
 		const res = await deleteUser(id, token)
 		setVersion(version + 1)
@@ -86,8 +96,19 @@ export default function RootUsers() {
 	}
 	const addUser = async (e: FormEvent) => {
 		e.preventDefault()
-		const res = await addNewUser(token, user)
-		console.log(res)
+		const res = await addNewUser(token, user).then((data) => {
+			if (data.status === 200) {
+				setUser({
+					...user,
+					login: '',
+					email: '',
+					password: '',
+					phone_number: ''
+				})
+
+				setVersion(version + 1)
+			}
+		})
 	}
 	const cancelUserHandler = (e: FormEvent) => {
 		e.preventDefault()
@@ -98,11 +119,12 @@ export default function RootUsers() {
 		e.preventDefault()
 		const res = await addNewRole(token, newRole)
 		if (res.status === 200) {
+			setVersion(version + 1)
+			setNewRole('')
+
 			refresh(token).then((data) => {
 				localStorage.setItem('token', data.data.access_token)
 			})
-			setVersion(version + 1)
-			setNewRole('')
 		}
 	}
 	return (
@@ -110,7 +132,6 @@ export default function RootUsers() {
 			<div>
 				<section className={styles.users}>
 					<div>
-						<button>Click</button>
 						<table className={styles.usersTable}>
 							<thead>
 								<tr>
@@ -129,7 +150,7 @@ export default function RootUsers() {
 										<td>{user.name}</td>
 										<td>{user.login}</td>
 										<td>{user.phone_number}</td>
-										<td>{user.role.role_name}</td>
+										<td>{user?.role?.role_name ? user.role.role_name : ''}</td>
 										<td>
 											<div className={styles.actions}>
 												<button
