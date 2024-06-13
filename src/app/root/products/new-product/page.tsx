@@ -9,6 +9,7 @@ import { Product } from '../../../types/Product'
 import { addProduct } from '../../../../utils/api/addProduct'
 import Toast from '../../../../components/UI/Toast.tsx/Toast'
 import { ToastType } from '../../../types/ToastType'
+import { refresh } from '../../../../utils/api/refresh'
 
 export default function NewProduct() {
 	const token = localStorage.getItem('token')
@@ -43,27 +44,32 @@ export default function NewProduct() {
 		})
 
 		form.append('product_img', file)
-		const res = addProduct(token, form).then((data) => {
-			if (data.status === 200) {
-				setIsToast(true)
-				setToastType('access')
-				setMessage('Додано успішно')
-				resetToastData()
-				setProduct({
-					product_name: '',
-					product_desc: '',
-					product_price: 0,
-					product_weight: 0,
-					product_image: '',
-					category_name: ''
-				})
-			} else {
+		const res = addProduct(token, form)
+			.then((data) => {
+				if (data.status === 200) {
+					setIsToast(true)
+					setToastType('access')
+					setMessage('Додано успішно')
+					resetToastData()
+					setProduct({
+						product_name: '',
+						product_desc: '',
+						product_price: 0,
+						product_weight: 0,
+						product_image: '',
+						category_name: ''
+					})
+					refresh(token).then((data) =>
+						localStorage.setItem('token', data.data.access_token)
+					)
+				}
+			})
+			.catch((err) => {
 				setIsToast(true)
 				setToastType('error')
-				setMessage('Помилка')
+				setMessage(err.response.data.message)
 				resetToastData()
-			}
-		})
+			})
 	}
 	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.name === 'product_image') {
@@ -92,7 +98,7 @@ export default function NewProduct() {
 		}, 5000)
 	}
 	return (
-		<section>
+		<section className={styles.container}>
 			<div>
 				<Toast isToast={isToast} toastType={toastType} message={message} />
 			</div>

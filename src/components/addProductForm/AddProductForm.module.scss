@@ -34,10 +34,11 @@
 .addProductInputs {
 	display: flex;
 	flex-direction: column;
-	width: 50%;
+	width: 100%;
 	gap: 16px;
 
 	label {
+		width: 50%;
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
@@ -82,7 +83,9 @@
 }
 .radioContainer {
 	display: flex;
-	flex-direction: column;
+	gap: 128px;
+	align-items: start;
+	// flex-direction: column;
 	h2 {
 		margin: 16px 0;
 	}
@@ -90,5 +93,15 @@
 		display: flex;
 		flex-direction: row;
 		gap: 4px;
+	}
+}
+.newCategoryContainer {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	h3 {
+		margin-top: 0;
+		cursor: pointer;
+		text-decoration: underline;
 	}
 }

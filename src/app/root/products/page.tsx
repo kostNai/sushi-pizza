@@ -28,7 +28,6 @@ export default function RootProducts() {
 
 	return (
 		<div>
-			<button>Click</button>
 			<section>
 				<Link href={`/root/${to.newProduct}`} className={styles.newProductLink}>
 					<IoAdd className={styles.newProductIcon} />

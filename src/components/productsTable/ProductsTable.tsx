@@ -4,6 +4,9 @@ import { deleteProduct } from '../../utils/api/deleteProduct'
 import styles from './ProductsTable.module.scss'
 import EditProductForm from '../editProductForm/EditProductForm'
 import { editProduct } from '../../utils/api/editProduct'
+import Toast from '../UI/Toast.tsx/Toast'
+import { ToastType } from '../../app/types/ToastType'
+import { refresh } from '../../utils/api/refresh'
 
 type Props = {
 	products: Product[]
@@ -21,18 +24,35 @@ const ProductTable = ({ products, version, setVersion }: Props) => {
 		product_weight: 0,
 		product_image: ''
 	})
+	const [message, setMessage] = useState('')
+	const [toastType, setToastType] = useState<ToastType | undefined>(null)
+	const [isToast, setIsToast] = useState(false)
 
 	const [productId, setProductId] = useState<string | undefined>('')
 
 	const token = localStorage.getItem('token')
 	const deleteProductHandler = (id: string) => {
 		setIsLoading(true)
-		const res = deleteProduct(token, id).then((data) => {
-			if (data.status === 200) {
-				setIsLoading(false)
-				setVersion(version + 1)
-			}
-		})
+		const res = deleteProduct(token, id)
+			.then((data) => {
+				if (data.status === 200) {
+					setIsToast(true)
+					setToastType('access')
+					setMessage('Видалено успішно')
+					resetToastData()
+					setIsLoading(false)
+					setVersion(version + 1)
+					refresh(token).then((data) =>
+						localStorage.setItem('token', data.data.access_token)
+					)
+				}
+			})
+			.catch((err) => {
+				setIsToast(true)
+				setToastType('error')
+				setMessage('Помилка')
+				resetToastData()
+			})
 	}
 	const editProductstart = (id: string) => {
 		setProductId(id)
@@ -58,8 +78,15 @@ const ProductTable = ({ products, version, setVersion }: Props) => {
 	) => {
 		setNewProduct({ ...newProduct, [e.target.name]: e.target.value })
 	}
+	const resetToastData = () => {
+		setTimeout(() => {
+			setIsToast(false)
+			setToastType(null)
+		}, 5000)
+	}
 	return (
 		<div className={styles.productsContainer}>
+			<Toast message={message} isToast={isToast} toastType={toastType} />
 			<table className={styles.productsTable}>
 				<thead>
 					<tr>

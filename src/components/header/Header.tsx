@@ -27,7 +27,7 @@ export default function Header() {
 			}
 			setLoginContext(payload.login)
 		}
-	}, [token, setLoginContext, router])
+	}, [token, setLoginContext, router, loginContext])
 
 	const logoutHandler = async () => {
 		const res = await logout(token)
