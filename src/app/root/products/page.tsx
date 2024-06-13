@@ -9,9 +9,7 @@ import styles from './styles.module.scss'
 import { getProducts } from '../../../utils/api/getProducts'
 import { Product } from '../../types/Product'
 import { refresh } from '../../../utils/api/refresh'
-import { deleteProduct } from '../../../utils/api/deleteProduct'
 import Loading from '../loading'
-import EditProductForm from '../../../components/editProductForm/EditProductForm'
 
 export default function RootProducts() {
 	const [products, setProducts] = useState<Product[] | undefined>([])

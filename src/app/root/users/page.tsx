@@ -2,7 +2,6 @@
 
 import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import 'react-toastify/dist/ReactToastify.css'
 
 import styles from './styles.module.scss'
 import { getUsers } from '../../../utils/api/getUsers'

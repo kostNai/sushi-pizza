@@ -1,5 +1,4 @@
 import { FormEvent, useState } from 'react'
-import 'react-toastify/dist/ReactToastify.css'
 import { Product } from '../../app/types/Product'
 import { deleteProduct } from '../../utils/api/deleteProduct'
 import styles from './ProductsTable.module.scss'

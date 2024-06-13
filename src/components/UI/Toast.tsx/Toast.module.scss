@@ -1,0 +1,46 @@
+.toastContainer {
+	width: 300px;
+	height: 60px;
+	padding: 0 32px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-radius: 10px;
+	position: absolute;
+	top: 0;
+	margin-top: -100px;
+	animation: toastAnim 4s ease-in-out 0s 1;
+	color: #fff;
+}
+
+.invisible {
+	display: none;
+}
+
+@keyframes toastAnim {
+	0% {
+		margin-top: -120px;
+	}
+	10% {
+		margin-top: 100px;
+	}
+	80% {
+		margin-top: 100px;
+	}
+	100% {
+		margin-top: -120px;
+	}
+}
+
+.access {
+	background: #07bc0c;
+}
+.error {
+	background: #e74c3c;
+}
+.toastIcon {
+	svg {
+		width: 25px;
+		height: 25px;
+	}
+}
