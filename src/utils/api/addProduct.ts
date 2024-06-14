@@ -8,11 +8,6 @@ export const addProduct = async (token: string, form: FormData) => {
 			'Content-Type': 'multipart/form-data'
 		}
 	})
-	// .then((data) => {
-	// 	return data
-	// })
-	// .catch((err) => {
-	// 	return err
-	// })
+
 	return res
 }

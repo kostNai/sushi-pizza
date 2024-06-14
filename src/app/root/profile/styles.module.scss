@@ -17,6 +17,15 @@
 		gap: 32px;
 	}
 }
+.changeImgContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	button {
+		height: fit-content;
+		width: fit-content;
+	}
+}
 .changeBtn {
 	font-size: 12px;
 	padding: 2px 8px;

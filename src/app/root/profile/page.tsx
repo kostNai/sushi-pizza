@@ -6,6 +6,9 @@ import { editRootUser } from '../../../utils/api/editRootUser'
 import { User } from '../../types/User'
 import EditUserForm from '../../../components/editUserForm/EditUserForm'
 import { refresh } from '../../../utils/api/refresh'
+import { editUser } from '../../../utils/api/editUser'
+import Toast from '../../../components/UI/Toast.tsx/Toast'
+import { ToastType } from '../../types/ToastType'
 
 export default function RootProfile() {
 	const [token, setToken] = useState<string | undefined>('')
@@ -19,7 +22,10 @@ export default function RootProfile() {
 		email: '',
 		phone_number: ''
 	})
-
+	const [file, setFile] = useState<File | undefined>(null)
+	const [message, setMessage] = useState('')
+	const [toastType, setToastType] = useState<ToastType | undefined>(null)
+	const [isToast, setIsToast] = useState(false)
 	useEffect(() => {
 		setToken(localStorage.getItem('token'))
 		if (token) {
@@ -27,7 +33,13 @@ export default function RootProfile() {
 			setPayload(JSON.parse(atob(arrayToken[1])))
 		}
 	}, [token, version])
-
+	const form = new FormData()
+	const resetToastData = () => {
+		setTimeout(() => {
+			setIsToast(false)
+			setToastType(null)
+		}, 5000)
+	}
 	const onChangeHandler = (
 		e: React.ChangeEvent<HTMLInputElement>,
 		name: string
@@ -36,19 +48,42 @@ export default function RootProfile() {
 			[name]: e.target.value
 		})
 	}
-	const editUser = async (e: FormEvent) => {
+	const editUserHandler = async (e: FormEvent) => {
 		e.preventDefault()
-
+		form.append('user_img', file)
+		const keys = Object.keys(user)
+		keys.map((key: string, indx) => {
+			form.append(key, Object.values(user)[indx].toString())
+		})
 		if (token) {
-			await editRootUser(user, token).then((data) => {
-				if (data.status === 200) {
-					refresh(token).then((data) => {
-						localStorage.setItem('token', data.data.access_token)
-						setVersion(version + 1)
-					})
-					setIsEdit(false)
-				}
-			})
+			await editUser(token, form, payload?.id)
+				.then((data) => {
+					if (data.status === 200) {
+						setToastType('access')
+						setIsToast(true)
+						setMessage('Дані успішно оновлено')
+						setFile(null)
+						setUser({
+							login: '',
+							name: '',
+							email: '',
+							phone_number: ''
+						})
+						resetToastData()
+
+						refresh(token).then((data) => {
+							localStorage.setItem('token', data.data.access_token)
+							setVersion(version + 1)
+						})
+						setIsEdit(false)
+					}
+				})
+				.catch((err) => {
+					setToastType('error')
+					setIsToast(true)
+					setMessage(err.response.data.message)
+					resetToastData()
+				})
 		}
 	}
 
@@ -58,15 +93,26 @@ export default function RootProfile() {
 	}
 	return (
 		<section className={styles.profileMain}>
+			<Toast message={message} isToast={isToast} toastType={toastType} />
 			<div className={styles.profileContainer}>
-				<Image
-					src={'/profile-img.svg'}
-					width={100}
-					height={100}
-					alt={'profile image'}
-					priority
-					className={styles.profileImg}
-				/>
+				<div className={styles.changeImgContainer}>
+					<Image
+						src={payload?.user_image ? payload.user_image : '/profile-img.svg'}
+						width={100}
+						height={100}
+						alt={'profile image'}
+						priority
+						className={styles.profileImg}
+					/>
+					<button className={styles.changeBtn} onClick={editUserHandler}>
+						Змінити
+					</button>
+					<input
+						type="file"
+						name="user_img"
+						onChange={(e) => setFile(e.target.files[0])}
+					/>
+				</div>
 				<p>Логін - {payload?.login}</p>
 				<div className={styles.changeContainer}>
 					<p>Email - </p>
@@ -139,7 +185,7 @@ export default function RootProfile() {
 					<EditUserForm
 						onChange={(e) => onChangeHandler(e, name)}
 						onClick={cancelHandler}
-						onSubmit={editUser}
+						onSubmit={editUserHandler}
 						value={user[name]}
 					/>
 				)}

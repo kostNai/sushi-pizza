@@ -8,6 +8,7 @@ export type User = {
 	password?: string
 	token?: string
 	phone_number?: string
+	user_image?: string
 	role_id?: string
 	role?: Role
 }
