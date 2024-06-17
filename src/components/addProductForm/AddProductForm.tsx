@@ -136,6 +136,22 @@ const AddProductForm = ({
 						/>
 					</label>
 				</div>
+				<div className={styles.radioContainer}>
+					<div>
+						<h4>Оберіть категорію</h4>
+						{filteredCategories.map((category: string, indx) => (
+							<label htmlFor="category_name" key={indx}>
+								<input
+									type="radio"
+									name="category_name"
+									onChange={onChangeInput}
+									value={category}
+								/>
+								{category}
+							</label>
+						))}
+					</div>
+				</div>
 				<div className={styles.addProductBtns}>
 					<button
 						type="submit"
@@ -148,22 +164,6 @@ const AddProductForm = ({
 					</button>
 				</div>
 			</form>
-			<div className={styles.radioContainer}>
-				<div>
-					<h4>Оберіть категорію</h4>
-					{filteredCategories.map((category: string, indx) => (
-						<label htmlFor="category_name" key={indx}>
-							<input
-								type="radio"
-								name="category_name"
-								onChange={onChangeInput}
-								value={category}
-							/>
-							{category}
-						</label>
-					))}
-				</div>
-			</div>
 			<div className={styles.newCategoryContainer}>
 				<h3
 					onClick={() => setIsCategoryAdd(!isCategoryAdd)}

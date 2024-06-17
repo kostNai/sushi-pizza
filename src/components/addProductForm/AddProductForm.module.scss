@@ -54,7 +54,8 @@
 	font-size: 14px;
 }
 .addProductBtns {
-	margin-top: 32px;
+	width: fit-content;
+	margin: 32px 0;
 	display: flex;
 	gap: 8px;
 	justify-content: center;
@@ -84,10 +85,10 @@
 .radioContainer {
 	display: flex;
 	gap: 128px;
-	align-items: start;
-	// flex-direction: column;
-	h2 {
-		margin: 16px 0;
+	align-items: flex-start;
+	margin: 16px 0;
+	h4 {
+		margin-bottom: 16px;
 	}
 	label {
 		display: flex;

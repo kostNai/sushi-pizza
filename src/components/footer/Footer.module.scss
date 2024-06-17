@@ -1,3 +1,37 @@
 .footer {
 	margin-top: 8px;
+	border-top: 1px solid #e4c59e;
+}
+.footerContainer {
+	margin: 32px 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.footerLinks {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+
+	li > a {
+		transition: 300ms;
+
+		&:hover {
+			color: rgb(248, 93, 93);
+		}
+	}
+}
+.footerFeedBack {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+.title {
+	a {
+		color: rgb(248, 93, 93);
+		transition: 300ms;
+		&:hover {
+			color: rgb(255, 34, 34);
+		}
+	}
 }

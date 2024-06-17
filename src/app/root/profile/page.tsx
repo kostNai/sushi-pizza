@@ -104,14 +104,15 @@ export default function RootProfile() {
 						priority
 						className={styles.profileImg}
 					/>
-					<button className={styles.changeBtn} onClick={editUserHandler}>
-						Змінити
-					</button>
 					<input
+						className={styles.userImageInput}
 						type="file"
 						name="user_img"
 						onChange={(e) => setFile(e.target.files[0])}
 					/>
+					<button className={styles.changeBtn} onClick={editUserHandler}>
+						Змінити
+					</button>
 				</div>
 				<p>Логін - {payload?.login}</p>
 				<div className={styles.changeContainer}>

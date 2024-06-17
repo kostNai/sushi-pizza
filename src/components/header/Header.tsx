@@ -11,23 +11,25 @@ import { useUserContext } from '../../context/userContext'
 
 export default function Header() {
 	const [token, setToken] = useState<string | undefined>('')
-	const [loginContext, setLoginContext] = useUserContext()
 	const router = useRouter()
+	const [loginContext, setLoginContext] = useUserContext()
+	const [role, setRole] = useState('')
 
 	useEffect(() => {
 		setToken(localStorage.getItem('token'))
 		if (token) {
 			const arrayToken = token.split('.')
 			const payload = JSON.parse(atob(arrayToken[1]))
+			setRole(payload.role)
 			const expired = payload.exp - Date.now() / 1000
 			if (expired <= 0) {
 				localStorage.removeItem('token')
 				setLoginContext('')
-				router.push('/login')
+				// router.push('/login')
 			}
 			setLoginContext(payload.login)
 		}
-	}, [token, setLoginContext, router, loginContext])
+	}, [token, setLoginContext, loginContext])
 
 	const logoutHandler = async () => {
 		const res = await logout(token)
@@ -58,7 +60,10 @@ export default function Header() {
 				) : (
 					<div>
 						Привіт,{' '}
-						<Link href={'/profile'} className={styles.userLink}>
+						<Link
+							href={role === 'root' ? '/root' : '/profile'}
+							className={styles.userLink}
+						>
 							{loginContext}
 						</Link>
 						<div>
