@@ -2,6 +2,8 @@ import Image from 'next/image'
 import { SlBasket } from 'react-icons/sl'
 import styles from './ProductCard.module.scss'
 import { Product } from '../../app/types/Product'
+import { Suspense } from 'react'
+import Loading from '../../app/loading'
 
 type Props = {
 	product: Product
@@ -11,15 +13,19 @@ export default function ProductCard({ product }: Props) {
 	return (
 		<div className={styles.productCard}>
 			<div>
-				<Image
-					src={
-						product?.product_image ? product.product_image : '/product-img.png'
-					}
-					width={350}
-					height={200}
-					alt="product image"
-					className={styles.productImg}
-				/>
+				<Suspense fallback={<Loading />}>
+					<Image
+						src={
+							product?.product_image
+								? product.product_image
+								: '/product-img.png'
+						}
+						width={350}
+						height={200}
+						alt="product image"
+						className={styles.productImg}
+					/>
+				</Suspense>
 			</div>
 			<div className={styles.productInfo}>
 				<h3 className={styles.productTitle}>{product.product_name}</h3>

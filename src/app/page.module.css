@@ -5,3 +5,18 @@
 	gap: 32px;
 	flex-wrap: wrap;
 }
+.pageNmbersContainer {
+	margin-top: 16px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.pageNumber {
+	padding: 16px;
+	font-size: 20px;
+	font-weight: 600;
+}
+.active {
+	color: rgb(248, 93, 93);
+}
