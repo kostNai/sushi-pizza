@@ -4,7 +4,7 @@ import Image from 'next/image'
 import styles from './page.module.css'
 import { Suspense, useEffect, useState } from 'react'
 import { Product } from './types/Product'
-import { getProducts } from '../utils/api/getProducts'
+import { getPaginateProducts } from '../utils/api/getPaginateProducts'
 import ProductCard from '../components/productCard/ProductCard'
 import { useUserContext } from '../context/userContext'
 import Loading from './root/loading'
@@ -47,7 +47,7 @@ export default function Home() {
 	}, [token, setLoginContext, loginContext])
 
 	useEffect(() => {
-		getProducts(page).then((data) => {
+		getPaginateProducts(page).then((data) => {
 			setProducts(data.data.products.data)
 			setCurrentPage(data.data.products?.current_page)
 			setProductsPerPage(data.data.products.per_page)
@@ -73,7 +73,7 @@ export default function Home() {
 	// 	}
 	// }
 	const paginate = async (page: string) => {
-		const res = await getProducts(page).then((data) => {
+		const res = await getPaginateProducts(page).then((data) => {
 			setCurrentPage(data.data.products.current_page)
 			setProducts(data.data.products.data)
 		})
@@ -85,27 +85,33 @@ export default function Home() {
 
 	return (
 		<section>
-			<div className={styles.container}>
-				{products?.map((product: Product) => (
-					<ProductCard product={product} key={product.id} />
-				))}
-			</div>
-			<div className={styles.pageNmbersContainer}>
-				{pages.length > 1 &&
-					pages.map((page, indx) => (
-						<Link
-							href={`/?page=${page}`}
-							key={indx}
-							className={
-								page == currentPage
-									? `${styles.pageNumber} ${styles.active}`
-									: styles.pageNumber
-							}
-							onClick={() => paginate(page)}
-						>
-							{page}
-						</Link>
+			<div>
+				<div className={styles.container}>
+					{products?.map((product: Product) => (
+						<ProductCard
+							product={product}
+							key={product.id}
+							onClick={() => router.push(`/${product.id}`)}
+						/>
 					))}
+				</div>
+				<div className={styles.pageNmbersContainer}>
+					{pages.length > 1 &&
+						pages.map((page, indx) => (
+							<Link
+								href={`/?page=${page}`}
+								key={indx}
+								className={
+									page == currentPage
+										? `${styles.pageNumber} ${styles.active}`
+										: styles.pageNumber
+								}
+								onClick={() => paginate(page)}
+							>
+								{page}
+							</Link>
+						))}
+				</div>
 			</div>
 		</section>
 	)

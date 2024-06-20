@@ -7,11 +7,12 @@ import Loading from '../../app/loading'
 
 type Props = {
 	product: Product
+	onClick: () => void
 }
 
-export default function ProductCard({ product }: Props) {
+export default function ProductCard({ product, onClick }: Props) {
 	return (
-		<div className={styles.productCard}>
+		<div className={styles.productCard} onClick={onClick}>
 			<div>
 				<Suspense fallback={<Loading />}>
 					<Image

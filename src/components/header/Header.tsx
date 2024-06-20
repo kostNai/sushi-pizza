@@ -2,8 +2,8 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 
 import styles from './Header.module.scss'
 import { logout } from '../../utils/api/logout'
@@ -14,6 +14,8 @@ export default function Header() {
 	const router = useRouter()
 	const [loginContext, setLoginContext] = useUserContext()
 	const [role, setRole] = useState('')
+	const ref = useRef<HTMLElement>()
+	const path = usePathname()
 
 	useEffect(() => {
 		setToken(localStorage.getItem('token'))
@@ -40,17 +42,38 @@ export default function Header() {
 		router.push('/')
 		return res
 	}
+	// if (ref.current) {
+	// 	console.log(ref.current.getBoundingClientRect())
+	// }
+
 	return (
-		<header className={styles.header}>
+		<header className={styles.header} ref={ref}>
 			<div className={styles.headerContainer}>
 				<div>
 					<Image src={'/logo.png'} width={50} height={50} alt="logo" />
 				</div>
 				<nav className={styles.menu}>
-					<Link href={'/'}>Головна</Link>
-					<Link href={'/menu'}>Меню</Link>
-					<Link href={'/about'}>Про нас</Link>
-					<Link href={'/contacts'}>Зв&apos;язатися з нами</Link>
+					<Link href={'/'} className={path === '/' ? styles.active : ''}>
+						Головна
+					</Link>
+					<Link
+						href={'/menu'}
+						className={path === '/menu' ? styles.active : ''}
+					>
+						Меню
+					</Link>
+					<Link
+						href={'/about'}
+						className={path === '/about' ? styles.active : ''}
+					>
+						Про нас
+					</Link>
+					<Link
+						href={'/contacts'}
+						className={path === '/contacts' ? styles.active : ''}
+					>
+						Зв&apos;язатися з нами
+					</Link>
 				</nav>
 				{!loginContext ? (
 					<div className={styles.login}>
