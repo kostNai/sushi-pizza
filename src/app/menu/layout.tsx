@@ -14,6 +14,7 @@ export default function MenuLayout({
 }>) {
 	const [categories, setCategories] = useState<Category[] | undefined>([])
 	const path = usePathname()
+
 	useEffect(() => {
 		getCategories().then((data) => {
 			setCategories(data.data.categories)
@@ -30,9 +31,13 @@ export default function MenuLayout({
 				<nav>
 					{filteredCategories.map((category, indx) => (
 						<Link
-							href={`${path}/${category.slug}`}
+							href={`/menu/${category.slug}`}
 							key={indx}
-							className={styles.categoryLink}
+							className={
+								path === `/menu/${category.slug}`
+									? `${styles.categoryLink} ${styles.active}`
+									: styles.categoryLink
+							}
 						>
 							{category.category_name}
 						</Link>

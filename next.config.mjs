@@ -1,10 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	images: {
-		domains: [
-			'lh3.googleusercontent.com',
-			'krababs-bucket.s3.amazonaws.com',
-			'media.istockphoto.com'
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'lh3.googleusercontent.com'
+			},
+			{
+				protocol: 'https',
+				hostname: 'krababs-bucket.s3.amazonaws.com'
+			},
+			{
+				protocol: 'https',
+				hostname: 'media.istockphoto.com'
+			}
 		]
 	},
 	reactStrictMode: false

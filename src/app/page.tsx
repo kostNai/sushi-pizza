@@ -1,21 +1,13 @@
 'use client'
 
-import Image from 'next/image'
 import styles from './page.module.css'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Product } from './types/Product'
 import { getPaginateProducts } from '../utils/api/getPaginateProducts'
 import ProductCard from '../components/productCard/ProductCard'
 import { useUserContext } from '../context/userContext'
-import Loading from './root/loading'
-import PaginationControls from '../components/paginationControls/PaginationControls'
-import axios from 'axios'
-import {
-	useParams,
-	usePathname,
-	useSearchParams,
-	useRouter
-} from 'next/navigation'
+
+import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function Home() {
@@ -25,9 +17,6 @@ export default function Home() {
 	const [currentPage, setCurrentPage] = useState()
 	const [total, setTotal] = useState(0)
 	const [productsPerPage, setProductsPerPage] = useState(0)
-	const [links, setLinks] = useState([])
-	const [version, setVersion] = useState(0)
-	const params = useParams()
 	const searchParams = useSearchParams()
 	const router = useRouter()
 
@@ -53,25 +42,8 @@ export default function Home() {
 			setProductsPerPage(data.data.products.per_page)
 			setTotal(data.data?.products?.total)
 		})
-	}, [version])
+	}, [])
 	const pagesCount = Math.ceil(total / productsPerPage)
-	// const paginate = async (page: string) => {
-	// 	if (links) {
-	// 		links?.filter((link, indx) => {
-	// 			if (indx.toString() === page) {
-	// 				console.log(link)
-
-	// 				const res = axios.get(link.url).then((data) => {
-	// 					if (data.status === 200) {
-	// 						setVersion(version + 1)
-	// 					}
-
-	// 					setProducts(data.data.products.data)
-	// 				})
-	// 			}
-	// 		})
-	// 	}
-	// }
 	const paginate = async (page: string) => {
 		const res = await getPaginateProducts(page).then((data) => {
 			setCurrentPage(data.data.products.current_page)

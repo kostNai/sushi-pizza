@@ -4,10 +4,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-
+import { GrBasket } from 'react-icons/gr'
 import styles from './Header.module.scss'
 import { logout } from '../../utils/api/logout'
-import { useUserContext } from '../../context/userContext'
+import { useBasketContext, useUserContext } from '../../context/userContext'
 
 export default function Header() {
 	const [token, setToken] = useState<string | undefined>('')
@@ -16,6 +16,7 @@ export default function Header() {
 	const [role, setRole] = useState('')
 	const ref = useRef<HTMLElement>()
 	const path = usePathname()
+	const { count, setCount } = useBasketContext()
 
 	useEffect(() => {
 		setToken(localStorage.getItem('token'))
@@ -75,31 +76,37 @@ export default function Header() {
 						Зв&apos;язатися з нами
 					</Link>
 				</nav>
-				{!loginContext ? (
-					<div className={styles.login}>
-						<Link href={'/login'}>Вхід</Link>
-						<Link href={'/register'}>Реєстрація</Link>
-					</div>
-				) : (
-					<div>
-						Привіт,{' '}
-						<Link
-							href={role === 'root' ? '/root' : '/profile'}
-							className={styles.userLink}
-						>
-							{loginContext}
-						</Link>
-						<div>
-							<Link
-								href={'/'}
-								className={styles.signOutLink}
-								onClick={logoutHandler}
-							>
-								Вихід
-							</Link>
+				<div className={styles.userTools}>
+					{!loginContext ? (
+						<div className={styles.login}>
+							<Link href={'/login'}>Вхід</Link>
+							<Link href={'/register'}>Реєстрація</Link>
 						</div>
+					) : (
+						<div>
+							Привіт,{' '}
+							<Link
+								href={role === 'root' ? '/root' : '/profile'}
+								className={styles.userLink}
+							>
+								{loginContext}
+							</Link>
+							<div>
+								<Link
+									href={'/'}
+									className={styles.signOutLink}
+									onClick={logoutHandler}
+								>
+									Вихід
+								</Link>
+							</div>
+						</div>
+					)}
+					<div className={styles.basketContainer}>
+						<GrBasket className={styles.basketIcon} size={25} />
+						<p className={styles.salesCounter}>{count}</p>
 					</div>
-				)}
+				</div>
 			</div>
 		</header>
 	)

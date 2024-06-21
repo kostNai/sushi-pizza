@@ -3,17 +3,26 @@
 import { createContext, useContext, useState } from 'react'
 
 const UserContext = createContext<any>(undefined)
+const BasketContext = createContext<any>(0)
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
-	let [loginContext, setLoginContext] = useState<string | undefined>('')
+	const [loginContext, setLoginContext] = useState<string | undefined>('')
+	const [addToCardContext, setAddToCardContext] = useState<number | undefined>(
+		0
+	)
 
 	return (
 		<UserContext.Provider value={[loginContext, setLoginContext]}>
-			{children}
+			<BasketContext.Provider value={[addToCardContext, setAddToCardContext]}>
+				{children}
+			</BasketContext.Provider>
 		</UserContext.Provider>
 	)
 }
 
 export function useUserContext() {
 	return useContext(UserContext)
+}
+export function useBasketContext() {
+	return useContext(BasketContext)
 }

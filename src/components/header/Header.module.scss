@@ -37,3 +37,31 @@
 .active {
 	color: rgb(248, 93, 93);
 }
+.userTools {
+	display: flex;
+	gap: 32px;
+	align-items: center;
+}
+.basketIcon {
+	transition: 300ms;
+	cursor: pointer;
+	&:hover {
+		stroke: rgb(248, 93, 93);
+		scale: 1.2;
+	}
+}
+.basketContainer {
+	display: flex;
+	align-items: center;
+}
+.salesCounter {
+	font-size: 12px;
+	color: #fff;
+	border-radius: 50%;
+	padding: 2px 4px;
+	background-color: rgb(255, 37, 37);
+	font-weight: 600;
+	position: relative;
+	top: 10px;
+	right: 15px;
+}
