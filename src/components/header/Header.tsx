@@ -7,16 +7,16 @@ import { usePathname, useRouter } from 'next/navigation'
 import { GrBasket } from 'react-icons/gr'
 import styles from './Header.module.scss'
 import { logout } from '../../utils/api/logout'
-import { useBasketContext, useUserContext } from '../../context/userContext'
+import { useBasketContext, useLoginContext } from '../../context/userContext'
 
 export default function Header() {
 	const [token, setToken] = useState<string | undefined>('')
 	const router = useRouter()
-	const [loginContext, setLoginContext] = useUserContext()
+	const [loginContext, setLoginContext] = useLoginContext()
 	const [role, setRole] = useState('')
 	const ref = useRef<HTMLElement>()
 	const path = usePathname()
-	const { count, setCount } = useBasketContext()
+	const [count, setCount] = useBasketContext()
 
 	useEffect(() => {
 		setToken(localStorage.getItem('token'))
@@ -32,7 +32,7 @@ export default function Header() {
 			}
 			setLoginContext(payload.login)
 		}
-	}, [token, setLoginContext, loginContext])
+	}, [token, setLoginContext, loginContext, count])
 
 	const logoutHandler = async () => {
 		const res = await logout(token)
@@ -43,6 +43,8 @@ export default function Header() {
 		router.push('/')
 		return res
 	}
+	console.log(count)
+
 	// if (ref.current) {
 	// 	console.log(ref.current.getBoundingClientRect())
 	// }
@@ -104,7 +106,7 @@ export default function Header() {
 					)}
 					<div className={styles.basketContainer}>
 						<GrBasket className={styles.basketIcon} size={25} />
-						<p className={styles.salesCounter}>{count}</p>
+						{count > 0 ? <p className={styles.salesCounter}>{count}</p> : false}
 					</div>
 				</div>
 			</div>

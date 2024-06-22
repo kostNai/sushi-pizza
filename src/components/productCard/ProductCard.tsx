@@ -4,6 +4,7 @@ import styles from './ProductCard.module.scss'
 import { Product } from '../../app/types/Product'
 import { Suspense } from 'react'
 import Loading from '../../app/loading'
+import { useBasketContext, useProductContext } from '../../context/userContext'
 
 type Props = {
 	product: Product
@@ -11,8 +12,14 @@ type Props = {
 }
 
 export default function ProductCard({ product, onClick }: Props) {
+	const [productContext, setProductContext] = useProductContext()
+	const [addToCardContext, setAddToCardContext] = useBasketContext()
+	const addToCardHandler = (product: Product) => {
+		setProductContext([...productContext, product])
+		setAddToCardContext(addToCardContext + 1)
+	}
 	return (
-		<div className={styles.productCard} onClick={onClick}>
+		<div className={styles.productCard}>
 			<div>
 				<Suspense fallback={<Loading />}>
 					<Image
@@ -25,6 +32,7 @@ export default function ProductCard({ product, onClick }: Props) {
 						height={200}
 						alt="product image"
 						className={styles.productImg}
+						onClick={onClick}
 					/>
 				</Suspense>
 			</div>
@@ -35,7 +43,10 @@ export default function ProductCard({ product, onClick }: Props) {
 
 				<div className={styles.btnContainer}>
 					<p className={styles.productPrice}>{product.product_price} грн.</p>
-					<button className={styles.btn}>
+					<button
+						className={styles.btn}
+						onClick={() => addToCardHandler(product)}
+					>
 						Хочу!
 						<SlBasket />
 					</button>

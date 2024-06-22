@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { Product } from './types/Product'
 import { getPaginateProducts } from '../utils/api/getPaginateProducts'
 import ProductCard from '../components/productCard/ProductCard'
-import { useUserContext } from '../context/userContext'
+import { useLoginContext, useProductContext } from '../context/userContext'
 
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -13,7 +13,7 @@ import Link from 'next/link'
 export default function Home() {
 	const [products, setProducts] = useState<Product[] | undefined>([])
 	const [token, setToken] = useState<string | undefined>('')
-	const [loginContext, setLoginContext] = useUserContext()
+	const [loginContext, setLoginContext] = useLoginContext()
 	const [currentPage, setCurrentPage] = useState()
 	const [total, setTotal] = useState(0)
 	const [productsPerPage, setProductsPerPage] = useState(0)
@@ -63,7 +63,9 @@ export default function Home() {
 						<ProductCard
 							product={product}
 							key={product.id}
-							onClick={() => router.push(`/${product.id}`)}
+							onClick={() =>
+								router.push(`/menu/${product.category.slug}/${product.id}`)
+							}
 						/>
 					))}
 				</div>

@@ -1,28 +1,39 @@
 'use client'
 
 import { createContext, useContext, useState } from 'react'
+import { User } from '../app/types/User'
+import { Product } from '../app/types/Product'
 
-const UserContext = createContext<any>(undefined)
+const LoginContext = createContext<any>(undefined)
 const BasketContext = createContext<any>(0)
+const ProductContext = createContext<any>(undefined)
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
 	const [loginContext, setLoginContext] = useState<string | undefined>('')
 	const [addToCardContext, setAddToCardContext] = useState<number | undefined>(
 		0
 	)
+	const [productContext, setProductContext] = useState<Product[] | undefined>(
+		[]
+	)
 
 	return (
-		<UserContext.Provider value={[loginContext, setLoginContext]}>
+		<LoginContext.Provider value={[loginContext, setLoginContext]}>
 			<BasketContext.Provider value={[addToCardContext, setAddToCardContext]}>
-				{children}
+				<ProductContext.Provider value={[productContext, setProductContext]}>
+					{children}
+				</ProductContext.Provider>
 			</BasketContext.Provider>
-		</UserContext.Provider>
+		</LoginContext.Provider>
 	)
 }
 
-export function useUserContext() {
-	return useContext(UserContext)
+export function useLoginContext() {
+	return useContext(LoginContext)
 }
 export function useBasketContext() {
 	return useContext(BasketContext)
+}
+export function useProductContext() {
+	return useContext(ProductContext)
 }
