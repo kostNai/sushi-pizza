@@ -1,0 +1,51 @@
+.productCard {
+	padding: 32px 16px;
+	display: flex;
+	border-radius: 10px;
+	align-items: center;
+	justify-content: space-between;
+	box-shadow: #e4c59e 1.95px 1.95px 2.6px;
+	div {
+		display: flex;
+	}
+}
+.productNameContainer {
+	margin-left: 24px;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: space-between;
+}
+.productName {
+	font-weight: 600;
+}
+.productTotalPrice {
+	align-items: center;
+	gap: 32px;
+}
+.productCount {
+	display: flex;
+	align-items: center;
+	border: 1px solid #e4c59e;
+	border-radius: 10px;
+	padding: 4px 8px;
+	p {
+		font-size: 16px;
+		padding: 8px;
+	}
+}
+
+.removeProduct {
+	cursor: pointer;
+	transition: 300ms;
+
+	&:hover {
+		scale: 1.2;
+	}
+}
+.productPrice {
+	font-size: 24px;
+	color: rgb(248, 93, 93);
+}
+.changeProductCount {
+	cursor: pointer;
+}

@@ -1,9 +1,9 @@
 'use client'
 
-import { useUserContext } from '../../context/userContext'
+import { useLoginContext } from '../../context/userContext'
 
 export default function RootPage() {
-	const [loginContext, setLoginContext] = useUserContext()
+	const [loginContext, setLoginContext] = useLoginContext()
 
 	return (
 		<section>

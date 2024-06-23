@@ -43,7 +43,6 @@ export default function Header() {
 		router.push('/')
 		return res
 	}
-	console.log(count)
 
 	// if (ref.current) {
 	// 	console.log(ref.current.getBoundingClientRect())
@@ -105,7 +104,11 @@ export default function Header() {
 						</div>
 					)}
 					<div className={styles.basketContainer}>
-						<GrBasket className={styles.basketIcon} size={25} />
+						<GrBasket
+							className={styles.basketIcon}
+							size={25}
+							onClick={() => router.push('/cart')}
+						/>
 						{count > 0 ? <p className={styles.salesCounter}>{count}</p> : false}
 					</div>
 				</div>

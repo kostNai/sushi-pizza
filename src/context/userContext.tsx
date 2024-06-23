@@ -1,7 +1,6 @@
 'use client'
 
 import { createContext, useContext, useState } from 'react'
-import { User } from '../app/types/User'
 import { Product } from '../app/types/Product'
 
 const LoginContext = createContext<any>(undefined)
