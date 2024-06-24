@@ -5,9 +5,15 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { GrBasket } from 'react-icons/gr'
+import { IoSearch } from 'react-icons/io5'
 import styles from './Header.module.scss'
 import { logout } from '../../utils/api/logout'
-import { useBasketContext, useLoginContext } from '../../context/userContext'
+import {
+	useBasketContext,
+	useLoginContext,
+	useSearchContext
+} from '../../context/userContext'
+import { Product } from '../../app/types/Product'
 
 export default function Header() {
 	const [token, setToken] = useState<string | undefined>('')
@@ -17,6 +23,8 @@ export default function Header() {
 	const ref = useRef<HTMLElement>()
 	const path = usePathname()
 	const [count, setCount] = useBasketContext()
+	const [searchProductContext, setSearchProductContext] = useSearchContext()
+	
 
 	useEffect(() => {
 		setToken(localStorage.getItem('token'))
@@ -28,7 +36,6 @@ export default function Header() {
 			if (expired <= 0) {
 				localStorage.removeItem('token')
 				setLoginContext('')
-				// router.push('/login')
 			}
 			setLoginContext(payload.login)
 		}
@@ -43,10 +50,6 @@ export default function Header() {
 		router.push('/')
 		return res
 	}
-
-	// if (ref.current) {
-	// 	console.log(ref.current.getBoundingClientRect())
-	// }
 
 	return (
 		<header className={styles.header} ref={ref}>
@@ -77,6 +80,11 @@ export default function Header() {
 						Зв&apos;язатися з нами
 					</Link>
 				</nav>
+				<IoSearch
+					size={24}
+					className={styles.searchIcon}
+					onClick={() => setSearchProductContext(!searchProductContext)}
+				/>
 				<div className={styles.userTools}>
 					{!loginContext ? (
 						<div className={styles.login}>

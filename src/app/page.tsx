@@ -1,22 +1,35 @@
 'use client'
 
 import styles from './page.module.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
+import { IoSearch } from 'react-icons/io5'
+import { RxCross1 } from 'react-icons/rx'
 import { Product } from './types/Product'
 import { getPaginateProducts } from '../utils/api/getPaginateProducts'
 import ProductCard from '../components/productCard/ProductCard'
-import { useLoginContext, useProductContext } from '../context/userContext'
-
-import { useSearchParams, useRouter } from 'next/navigation'
-import Link from 'next/link'
+import {
+	useLoginContext,
+	useProductContext,
+	useSearchContext
+} from '../context/userContext'
 
 export default function Home() {
 	const [products, setProducts] = useState<Product[] | undefined>([])
 	const [token, setToken] = useState<string | undefined>('')
-	const [loginContext, setLoginContext] = useLoginContext()
 	const [currentPage, setCurrentPage] = useState()
 	const [total, setTotal] = useState(0)
 	const [productsPerPage, setProductsPerPage] = useState(0)
+	const [foundedProducts, setFoundedProducts] = useState<Product[] | undefined>(
+		[]
+	)
+	const ref = useRef<HTMLInputElement>()
+	const [searchKey, setSearchKey] = useState('')
+	const [loginContext, setLoginContext] = useLoginContext()
+	const [searchProductContext, setSearchProductContext] = useSearchContext()
+
 	const searchParams = useSearchParams()
 	const router = useRouter()
 
@@ -55,8 +68,35 @@ export default function Home() {
 		pages.push((i + 1).toString())
 	}
 
-	return (
+	const onChangeHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchKey(e.target.value)
+		const test = products.filter((product: Product) => {
+			if (ref.current) {
+				if (
+					product.product_name
+						.toLowerCase()
+						.includes(ref.current.value.toLowerCase())
+				) {
+					return product
+				}
+			}
+			return
+		})
+
+		setFoundedProducts([...test])
+	}
+
+	return !searchProductContext ? (
 		<section>
+			<div className={styles.banner}>
+				<Image
+					src={'/banner.jpg'}
+					width={1500}
+					height={600}
+					alt="banner"
+					className={styles.bannerImg}
+				/>
+			</div>
 			<div>
 				<div className={styles.container}>
 					{products?.map((product: Product) => (
@@ -86,6 +126,44 @@ export default function Home() {
 							</Link>
 						))}
 				</div>
+			</div>
+		</section>
+	) : (
+		<section className={styles.foundedProductsContainer}>
+			<div className={styles.searchProducts}>
+				<label className={styles.seachProductsInputContainer}>
+					<span className={styles.seachProductsInputSpan}>
+						<span className={styles.searchProductsIcon}>
+							<IoSearch size={24} />
+						</span>
+						<input
+							type="text"
+							value={searchKey}
+							onChange={(e) => {
+								onChangeHandler(e)
+							}}
+							ref={ref}
+							className={styles.seachProductsInput}
+							placeholder="Пошук"
+						/>
+					</span>
+					<button
+						onClick={() => setSearchProductContext(false)}
+						className={styles.searchProductBtn}
+					>
+						<RxCross1 size={24} />
+					</button>
+				</label>
+			</div>
+			<div className={styles.foundedProducts}>
+				{foundedProducts &&
+					foundedProducts.map((product, indx) => (
+						<ProductCard
+							product={product}
+							onClick={() => {}}
+							key={product.id}
+						/>
+					))}
 			</div>
 		</section>
 	)
