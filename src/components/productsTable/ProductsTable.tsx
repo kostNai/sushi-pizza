@@ -1,4 +1,7 @@
-import { FormEvent, useState } from 'react'
+'use client'
+
+import { FormEvent, useEffect, useRef, useState } from 'react'
+import { FaLongArrowAltDown, FaLongArrowAltUp } from 'react-icons/fa'
 import { Product } from '../../app/types/Product'
 import { deleteProduct } from '../../utils/api/deleteProduct'
 import styles from './ProductsTable.module.scss'
@@ -7,14 +10,12 @@ import { editProduct } from '../../utils/api/editProduct'
 import Toast from '../UI/Toast.tsx/Toast'
 import { ToastType } from '../../app/types/ToastType'
 import { refresh } from '../../utils/api/refresh'
+import { OrderParam } from '../../app/types/OrderParamType'
+import { getOrderedProducts } from '../../utils/api/getOrderedProducts'
+import { OrderOption } from '../../app/types/OrderOption'
+import { getProducts } from '../../utils/api/getProducts'
 
-type Props = {
-	products: Product[]
-	version: number
-	setVersion: (version: number) => void
-}
-
-const ProductTable = ({ products, version, setVersion }: Props) => {
+const ProductTable = () => {
 	const [isLoading, setIsLoading] = useState<boolean | undefined>(false)
 	const [isEdit, setIsEdit] = useState<boolean | undefined>(false)
 	const [newProduct, setNewProduct] = useState<Product | undefined>({
@@ -24,13 +25,25 @@ const ProductTable = ({ products, version, setVersion }: Props) => {
 		product_weight: 0,
 		product_image: ''
 	})
+	const [orderOption, setOrderOption] = useState<OrderOption | undefined>('asc')
 	const [message, setMessage] = useState('')
 	const [toastType, setToastType] = useState<ToastType | undefined>(null)
 	const [isToast, setIsToast] = useState(false)
-
+	const [products, setProducts] = useState<Product[] | undefined>([])
 	const [productId, setProductId] = useState<string | undefined>('')
-
+	const [orderParam, setOrderParam] = useState<OrderParam | undefined>()
+	const [version, setVersion] = useState(0)
 	const token = localStorage.getItem('token')
+
+	useEffect(() => {
+		const res = getProducts().then((data) => {
+			setProducts(data.data.products)
+			refresh(token).then((data) =>
+				localStorage.setItem('token', data.data.access_token)
+			)
+		})
+	}, [version])
+
 	const deleteProductHandler = (id: string) => {
 		setIsLoading(true)
 		const res = deleteProduct(token, id)
@@ -50,7 +63,7 @@ const ProductTable = ({ products, version, setVersion }: Props) => {
 			.catch((err) => {
 				setIsToast(true)
 				setToastType('error')
-				setMessage('Помилка')
+				setMessage(err)
 				resetToastData()
 			})
 	}
@@ -84,18 +97,78 @@ const ProductTable = ({ products, version, setVersion }: Props) => {
 			setToastType(null)
 		}, 5000)
 	}
+	const orderPeoductsHandler = (
+		orderParam: OrderParam,
+		order_option: OrderOption
+	) => {
+		setOrderOption(orderOption === 'asc' ? 'desc' : 'asc')
+		getOrderedProducts(orderParam, order_option).then((data) => {
+			setProducts(data.data.products)
+		})
+	}
 	return (
 		<div className={styles.productsContainer}>
 			<Toast message={message} isToast={isToast} toastType={toastType} />
 			<table className={styles.productsTable}>
 				<thead>
 					<tr>
-						<th>id</th>
-						<th>Назва</th>
-						<th>Опис</th>
-						<th>Ціна</th>
-						<th>Вага</th>
-						<th>Категорія</th>
+						<th
+							onClick={() => {
+								setOrderParam('id')
+								orderPeoductsHandler(orderParam, orderOption)
+							}}
+							abbr="id"
+						>
+							id
+							{orderOption === 'desc' ? (
+								<FaLongArrowAltUp />
+							) : (
+								<FaLongArrowAltDown />
+							)}
+						</th>
+						<th
+							onClick={() => orderPeoductsHandler('product_name', orderOption)}
+						>
+							Назва
+							{orderOption === 'desc' ? (
+								<FaLongArrowAltUp />
+							) : (
+								<FaLongArrowAltDown />
+							)}
+						</th>
+						<th
+							onClick={() => orderPeoductsHandler('product_desc', orderOption)}
+						>
+							Опис
+							{orderOption === 'desc' ? (
+								<FaLongArrowAltUp />
+							) : (
+								<FaLongArrowAltDown />
+							)}
+						</th>
+						<th
+							onClick={() => orderPeoductsHandler('product_price', orderOption)}
+						>
+							Ціна
+							{orderOption === 'desc' ? (
+								<FaLongArrowAltUp />
+							) : (
+								<FaLongArrowAltDown />
+							)}
+						</th>
+						<th
+							onClick={() =>
+								orderPeoductsHandler('product_weight', orderOption)
+							}
+						>
+							Вага
+							{orderOption === 'desc' ? (
+								<FaLongArrowAltUp />
+							) : (
+								<FaLongArrowAltDown />
+							)}
+						</th>
+						<th>Категорія </th>
 						<th>Дії</th>
 					</tr>
 				</thead>

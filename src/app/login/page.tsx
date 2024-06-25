@@ -5,13 +5,13 @@ import styles from './styles.module.scss'
 import { FormEvent, useState } from 'react'
 import { login } from '../../utils/api/fetchLogin'
 import { useRouter } from 'next/navigation'
-import { useUserContext } from '../../context/userContext'
+import { useLoginContext } from '../../context/userContext'
 
 export default function Login() {
 	const [userLogin, setUserLogin] = useState<string | undefined>('')
 	const [password, setPassword] = useState<string | undefined>('')
 
-	const [loginContext, setLoginContext] = useUserContext()
+	const [loginContext, setLoginContext] = useLoginContext()
 
 	const router = useRouter()
 

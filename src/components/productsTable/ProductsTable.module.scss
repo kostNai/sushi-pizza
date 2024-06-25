@@ -6,9 +6,12 @@
 	padding: 8px;
 }
 .productsTable {
-	border: 1px solid #fff;
+	border: 1px solid #af8260;
 	border-collapse: collapse;
 	width: 100%;
+	th {
+		cursor: pointer;
+	}
 	th,
 	td {
 		background: transparent;
@@ -21,7 +24,7 @@
 		text-align: center;
 	}
 	thead {
-		border: 1px solid #fff;
+		border: 1px solid #af8260;
 	}
 	tbody {
 		tr {

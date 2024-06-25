@@ -53,7 +53,7 @@ export default function Cart() {
 		</section>
 	) : (
 		<div className={styles.emptyCartContainer}>
-			<h2>Важа корзина порожня.</h2>
+			<h2>Ваш кошик порожній.</h2>
 			<div className={styles.emptyCartLinks}>
 				<Link href={'/'}>На головну</Link>
 				<Link href={'/menu'}>До меню</Link>

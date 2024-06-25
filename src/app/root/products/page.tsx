@@ -12,20 +12,6 @@ import { refresh } from '../../../utils/api/refresh'
 import Loading from '../loading'
 
 export default function RootProducts() {
-	const [products, setProducts] = useState<Product[] | undefined>([])
-	const [version, setVersion] = useState<number | undefined>(0)
-
-	const token = localStorage.getItem('token')
-
-	useEffect(() => {
-		const res = getProducts().then((data) => {
-			setProducts(data.data.products)
-			refresh(token).then((data) =>
-				localStorage.setItem('token', data.data.access_token)
-			)
-		})
-	}, [token, version])
-
 	return (
 		<div>
 			<section>
@@ -34,11 +20,7 @@ export default function RootProducts() {
 					Додати новий продукт
 				</Link>
 				<Suspense fallback={<Loading />}>
-					<ProductTable
-						products={products}
-						version={version}
-						setVersion={setVersion}
-					/>
+					<ProductTable />
 				</Suspense>
 			</section>
 		</div>

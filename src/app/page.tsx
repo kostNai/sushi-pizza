@@ -1,7 +1,7 @@
 'use client'
 
 import styles from './page.module.css'
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -15,6 +15,7 @@ import {
 	useProductContext,
 	useSearchContext
 } from '../context/userContext'
+import Loading from './root/loading'
 
 export default function Home() {
 	const [products, setProducts] = useState<Product[] | undefined>([])
@@ -99,15 +100,17 @@ export default function Home() {
 			</div>
 			<div>
 				<div className={styles.container}>
-					{products?.map((product: Product) => (
-						<ProductCard
-							product={product}
-							key={product.id}
-							onClick={() =>
-								router.push(`/menu/${product.category.slug}/${product.id}`)
-							}
-						/>
-					))}
+					<Suspense fallback={<Loading />}>
+						{products?.map((product: Product) => (
+							<ProductCard
+								product={product}
+								key={product.id}
+								onClick={() =>
+									router.push(`/menu/${product.category.slug}/${product.id}`)
+								}
+							/>
+						))}
+					</Suspense>
 				</div>
 				<div className={styles.pageNmbersContainer}>
 					{pages.length > 1 &&
