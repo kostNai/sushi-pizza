@@ -238,14 +238,14 @@ export default function RootUsers() {
 									addnewRoleHandler(e, newRole)
 								}}
 							/>
-							{/* <AddUserForm
+							<AddUserForm
 								user={user}
 								onChangeHandler={(e) => onChangeUserHandler(e)}
 								onSubmit={addUser}
 								onCancelClick={cancelUserHandler}
 								isAddingUser={isAddingUser}
 								onClickTitle={() => setIsAddingUser(true)}
-							/> */}
+							/>
 						</div>
 					</div>
 				</section>
