@@ -16,13 +16,13 @@ import EditProductForm from '@/components/editProductForm/EditProductForm'
 import Toast from '../UI/Toast.tsx/Toast'
 
 const TABLE_ITEMS = [
-	{ name: 'id', abbr: 'id', isOrder: false },
-	{ name: 'Назва', abbr: 'product_name', isOrder: false },
-	{ name: 'Опис', abbr: 'product_desc', isOrder: false },
-	{ name: 'Ціна', abbr: 'product_price', isOrder: false },
-	{ name: 'Вага', abbr: 'product_weight', isOrder: false },
-	{ name: 'Категорія', abbr: 'category_name', isOrder: false },
-	{ name: 'Дії', abbr: 'actions', isOrder: false }
+	{ name: 'id', abbr: 'id' },
+	{ name: 'Назва', abbr: 'product_name' },
+	{ name: 'Опис', abbr: 'product_desc' },
+	{ name: 'Ціна', abbr: 'product_price' },
+	{ name: 'Вага', abbr: 'product_weight' },
+	{ name: 'Категорія', abbr: 'category_name' },
+	{ name: 'Дії', abbr: 'actions' }
 ]
 
 const ProductTable = () => {
@@ -36,12 +36,12 @@ const ProductTable = () => {
 		product_image: ''
 	})
 	const [orderOption, setOrderOption] = useState<OrderOption | undefined>('asc')
+	const [orderParam, setOrderParam] = useState<OrderParam | undefined>()
 	const [message, setMessage] = useState('')
 	const [toastType, setToastType] = useState<ToastType | undefined>(null)
 	const [isToast, setIsToast] = useState(false)
 	const [products, setProducts] = useState<Product[] | undefined>([])
 	const [productId, setProductId] = useState<string | undefined>('')
-	const [orderParam, setOrderParam] = useState<OrderParam | undefined>()
 	const [version, setVersion] = useState(0)
 	const refs = useRef<HTMLTableCellElement[]>([])
 	const token = localStorage.getItem('token')

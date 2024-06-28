@@ -6,8 +6,11 @@ export const getOrderedProducts = async (
 	param: OrderParam,
 	order_option: OrderOption
 ) => {
-	const res = await axios.get('http://127.0.0.1:8000/api/get-ordered-product', {
-		params: { param, order_option }
-	})
+	const res = await axios.get(
+		'http://127.0.0.1:8000/api/get-ordered-products',
+		{
+			params: { param, order_option }
+		}
+	)
 	return res
 }
