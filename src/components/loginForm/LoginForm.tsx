@@ -34,7 +34,7 @@ export default function LoginForm() {
 				if (role) {
 					switch (role) {
 						case 'root':
-							router.push('/root')
+							router.push('/admin')
 							break
 						case 'admin':
 							router.push('/admin')

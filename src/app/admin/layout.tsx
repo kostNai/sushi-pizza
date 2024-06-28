@@ -24,30 +24,31 @@ export default function RootUserLayout({
 	}, [])
 
 	return (
-		role === 'root' && (
+		role === 'root' ||
+		(role === 'admin' && (
 			<section className={styles.rootLayout}>
 				<nav className={styles.rootMenu}>
 					<ul className={styles.rootList}>
 						<li>
 							<Link
-								href={`/root/profile`}
-								className={path === '/root/profile' ? `${styles.active}` : ''}
+								href={`/admin/profile`}
+								className={path === '/admin/profile' ? `${styles.active}` : ''}
 							>
 								Профіль
 							</Link>
 						</li>
 						<li>
 							<Link
-								href={`/root/users`}
-								className={path === '/root/users' ? `${styles.active}` : ''}
+								href={`/admin/users`}
+								className={path === '/admin/users' ? `${styles.active}` : ''}
 							>
 								Користувачі
 							</Link>
 						</li>
 						<li>
 							<Link
-								href={`/root/products`}
-								className={path === '/root/products' ? `${styles.active}` : ''}
+								href={`/admin/products`}
+								className={path === '/admin/products' ? `${styles.active}` : ''}
 							>
 								Продукти
 							</Link>
@@ -56,6 +57,6 @@ export default function RootUserLayout({
 				</nav>
 				<section>{children}</section>
 			</section>
-		)
+		))
 	)
 }

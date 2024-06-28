@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import LoginForm from '@/components/loginForm/LoginForm'
-import Loading from '@/app/root/loading'
+import Loading from '@/src/app/admin/loading'
 
 export default function Login() {
 	return (

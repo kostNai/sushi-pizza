@@ -7,13 +7,12 @@ import { usePathname, useRouter } from 'next/navigation'
 import { GrBasket } from 'react-icons/gr'
 import { IoSearch } from 'react-icons/io5'
 import styles from './Header.module.scss'
-import { logout } from '../../utils/api/logout'
+import { logout } from '@/utils/api/logout'
 import {
 	useBasketContext,
 	useLoginContext,
 	useSearchContext
-} from '../../context/userContext'
-import { Product } from '../../app/types/Product'
+} from '@/context/userContext'
 
 export default function Header() {
 	const [token, setToken] = useState<string | undefined>('')
@@ -24,7 +23,6 @@ export default function Header() {
 	const path = usePathname()
 	const [count, setCount] = useBasketContext()
 	const [searchProductContext, setSearchProductContext] = useSearchContext()
-	
 
 	useEffect(() => {
 		setToken(localStorage.getItem('token'))
@@ -39,15 +37,16 @@ export default function Header() {
 			}
 			setLoginContext(payload.login)
 		}
-	}, [token, setLoginContext, loginContext, count])
+	}, [loginContext, count])
 
 	const logoutHandler = async () => {
-		const res = await logout(token)
-		console.log(res.data)
-
-		localStorage.removeItem('token')
-		setLoginContext('')
-		router.push('/')
+		const res = await logout(token).then((data) => {
+			if (data.status === 200) {
+				localStorage.removeItem('token')
+				setLoginContext('')
+				router.push('/')
+			}
+		})
 		return res
 	}
 

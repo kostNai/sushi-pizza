@@ -2,14 +2,14 @@
 
 import { FormEvent, useEffect, useState } from 'react'
 import styles from './styles.module.scss'
-import AddProductForm from '../../../../components/addProductForm/AddProductForm'
-import { Category } from '../../../types/Category'
-import { getCategories } from '../../../../utils/api/getCategories'
-import { Product } from '../../../types/Product'
-import { addProduct } from '../../../../utils/api/addProduct'
-import Toast from '../../../../components/UI/Toast.tsx/Toast'
-import { ToastType } from '../../../types/ToastType'
-import { refresh } from '../../../../utils/api/refresh'
+import AddProductForm from '@/components/addProductForm/AddProductForm'
+import { Category } from '@/types/Category'
+import { getCategories } from '@/utils/api/getCategories'
+import { Product } from '@/types/Product'
+import { addProduct } from '@/utils/api/addProduct'
+import Toast from '@/components/UI/Toast.tsx/Toast'
+import { ToastType } from '@/types/ToastType'
+import { refresh } from '@/utils/api/refresh'
 
 export default function NewProduct() {
 	const token = localStorage.getItem('token')
