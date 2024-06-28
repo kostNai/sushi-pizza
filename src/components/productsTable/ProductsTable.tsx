@@ -1,19 +1,29 @@
 'use client'
 
-import { FormEvent, useEffect, useRef, useState } from 'react'
+import React, { FormEvent, useEffect, useRef, useState } from 'react'
 import { FaLongArrowAltDown, FaLongArrowAltUp } from 'react-icons/fa'
-import { Product } from '../../app/types/Product'
-import { deleteProduct } from '../../utils/api/deleteProduct'
 import styles from './ProductsTable.module.scss'
-import EditProductForm from '../editProductForm/EditProductForm'
-import { editProduct } from '../../utils/api/editProduct'
+import { Product } from '@/types/Product'
+import { ToastType } from '@/types/ToastType'
+import { OrderParam } from '@/types/OrderParamType'
+import { OrderOption } from '@/types/OrderOption'
+import { deleteProduct } from '@/utils/api/deleteProduct'
+import { editProduct } from '@/utils/api/editProduct'
+import { refresh } from '@/utils/api/refresh'
+import { getOrderedProducts } from '@/utils/api/getOrderedProducts'
+import { getProducts } from '@/utils/api/getProducts'
+import EditProductForm from '@/components/editProductForm/EditProductForm'
 import Toast from '../UI/Toast.tsx/Toast'
-import { ToastType } from '../../app/types/ToastType'
-import { refresh } from '../../utils/api/refresh'
-import { OrderParam } from '../../app/types/OrderParamType'
-import { getOrderedProducts } from '../../utils/api/getOrderedProducts'
-import { OrderOption } from '../../app/types/OrderOption'
-import { getProducts } from '../../utils/api/getProducts'
+
+const TABLE_ITEMS = [
+	{ name: 'id', abbr: 'id', isOrder: false },
+	{ name: 'Назва', abbr: 'product_name', isOrder: false },
+	{ name: 'Опис', abbr: 'product_desc', isOrder: false },
+	{ name: 'Ціна', abbr: 'product_price', isOrder: false },
+	{ name: 'Вага', abbr: 'product_weight', isOrder: false },
+	{ name: 'Категорія', abbr: 'category_name', isOrder: false },
+	{ name: 'Дії', abbr: 'actions', isOrder: false }
+]
 
 const ProductTable = () => {
 	const [isLoading, setIsLoading] = useState<boolean | undefined>(false)
@@ -33,6 +43,7 @@ const ProductTable = () => {
 	const [productId, setProductId] = useState<string | undefined>('')
 	const [orderParam, setOrderParam] = useState<OrderParam | undefined>()
 	const [version, setVersion] = useState(0)
+	const refs = useRef<HTMLTableCellElement[]>([])
 	const token = localStorage.getItem('token')
 
 	useEffect(() => {
@@ -97,12 +108,15 @@ const ProductTable = () => {
 			setToastType(null)
 		}, 5000)
 	}
-	const orderPeoductsHandler = (
+	const orderProductsHandler = async (
 		orderParam: OrderParam,
-		order_option: OrderOption
+		order_option: OrderOption,
+		indx: number
 	) => {
+		orderParam = refs.current[indx].abbr
+		setOrderParam(orderParam)
 		setOrderOption(orderOption === 'asc' ? 'desc' : 'asc')
-		getOrderedProducts(orderParam, order_option).then((data) => {
+		await getOrderedProducts(orderParam, order_option).then((data) => {
 			setProducts(data.data.products)
 		})
 	}
@@ -112,64 +126,28 @@ const ProductTable = () => {
 			<table className={styles.productsTable}>
 				<thead>
 					<tr>
-						<th
-							onClick={() => {
-								setOrderParam('id')
-								orderPeoductsHandler(orderParam, orderOption)
-							}}
-							abbr="id"
-						>
-							id
-							{orderOption === 'desc' ? (
-								<FaLongArrowAltUp />
-							) : (
-								<FaLongArrowAltDown />
-							)}
-						</th>
-						<th
-							onClick={() => orderPeoductsHandler('product_name', orderOption)}
-						>
-							Назва
-							{orderOption === 'desc' ? (
-								<FaLongArrowAltUp />
-							) : (
-								<FaLongArrowAltDown />
-							)}
-						</th>
-						<th
-							onClick={() => orderPeoductsHandler('product_desc', orderOption)}
-						>
-							Опис
-							{orderOption === 'desc' ? (
-								<FaLongArrowAltUp />
-							) : (
-								<FaLongArrowAltDown />
-							)}
-						</th>
-						<th
-							onClick={() => orderPeoductsHandler('product_price', orderOption)}
-						>
-							Ціна
-							{orderOption === 'desc' ? (
-								<FaLongArrowAltUp />
-							) : (
-								<FaLongArrowAltDown />
-							)}
-						</th>
-						<th
-							onClick={() =>
-								orderPeoductsHandler('product_weight', orderOption)
-							}
-						>
-							Вага
-							{orderOption === 'desc' ? (
-								<FaLongArrowAltUp />
-							) : (
-								<FaLongArrowAltDown />
-							)}
-						</th>
-						<th>Категорія </th>
-						<th>Дії</th>
+						{TABLE_ITEMS.map((item, indx) => (
+							<th
+								key={indx}
+								ref={(el) => (refs.current[indx] = el)}
+								onClick={() =>
+									orderProductsHandler(orderParam, orderOption, indx)
+								}
+								abbr={item.abbr}
+							>
+								{item.name}
+
+								{refs.current[indx]?.abbr == orderParam ? (
+									orderOption === 'desc' ? (
+										<FaLongArrowAltUp />
+									) : (
+										<FaLongArrowAltDown />
+									)
+								) : (
+									''
+								)}
+							</th>
+						))}
 					</tr>
 				</thead>
 				<tbody>

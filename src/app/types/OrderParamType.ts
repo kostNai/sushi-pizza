@@ -4,3 +4,4 @@ export type OrderParam =
 	| 'product_desc'
 	| 'product_price'
 	| 'product_weight'
+	| string

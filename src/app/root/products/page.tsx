@@ -1,17 +1,12 @@
-'use client'
-
 import { Suspense, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { IoAdd } from 'react-icons/io5'
 import ProductTable from '../../../components/productsTable/ProductsTable'
 import { to } from '../../../routes/products/to'
 import styles from './styles.module.scss'
-import { getProducts } from '../../../utils/api/getProducts'
-import { Product } from '../../types/Product'
-import { refresh } from '../../../utils/api/refresh'
-import Loading from '../loading'
+import Loading from '@/app/root/loading'
 
-export default function RootProducts() {
+export default async function RootProducts() {
 	return (
 		<div>
 			<section>
