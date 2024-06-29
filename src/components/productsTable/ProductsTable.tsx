@@ -1,6 +1,14 @@
 'use client'
 
-import React, { FormEvent, useEffect, useRef, useState } from 'react'
+import React, {
+	FormEvent,
+	useEffect,
+	useRef,
+	useState,
+	ElementRef,
+	MutableRefObject,
+	LegacyRef
+} from 'react'
 import { FaLongArrowAltDown, FaLongArrowAltUp } from 'react-icons/fa'
 import styles from './ProductsTable.module.scss'
 import { Product } from '@/types/Product'
@@ -43,7 +51,7 @@ const ProductTable = () => {
 	const [products, setProducts] = useState<Product[] | undefined>([])
 	const [productId, setProductId] = useState<string | undefined>('')
 	const [version, setVersion] = useState(0)
-	const refs = useRef<HTMLTableCellElement[]>([])
+	const refs = useRef<HTMLTableCellElement>(null)
 	const token = localStorage.getItem('token')
 
 	useEffect(() => {
@@ -129,7 +137,9 @@ const ProductTable = () => {
 						{TABLE_ITEMS.map((item, indx) => (
 							<th
 								key={indx}
-								ref={(el) => (refs.current[indx] = el)}
+								ref={(el: HTMLTableCellElement) => {
+									refs.current[indx] = el
+								}}
 								onClick={() =>
 									orderProductsHandler(orderParam, orderOption, indx)
 								}

@@ -166,7 +166,9 @@ export default function RootUsers() {
 									{TABLE_ITEMS.map((item, indx) => (
 										<th
 											key={indx}
-											ref={(el) => (refs.current[indx] = el)}
+											ref={(el) => {
+												refs.current[indx] = el
+											}}
 											onClick={() =>
 												orderUsersHandler(orderParam, orderOption, indx)
 											}
