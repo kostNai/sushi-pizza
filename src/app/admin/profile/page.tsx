@@ -2,13 +2,12 @@
 import Image from 'next/image'
 import { FormEvent, useEffect, useState } from 'react'
 import styles from './styles.module.scss'
-import { editRootUser } from '../../../utils/api/editRootUser'
-import { User } from '../../types/User'
-import EditUserForm from '../../../components/editUserForm/EditUserForm'
-import { refresh } from '../../../utils/api/refresh'
-import { editUser } from '../../../utils/api/editUser'
-import Toast from '../../../components/UI/Toast.tsx/Toast'
-import { ToastType } from '../../types/ToastType'
+import { User } from '@/types/User'
+import EditUserForm from '@/components/editUserForm/EditUserForm'
+import { refresh } from '@/utils/api/refresh'
+import { editUser } from '@/utils/api/editUser'
+import Toast from '@/components/UI/Toast.tsx/Toast'
+import { ToastType } from '@/types/ToastType'
 
 export default function RootProfile() {
 	const [token, setToken] = useState<string | undefined>('')

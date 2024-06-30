@@ -11,7 +11,7 @@ import { Product } from './types/Product'
 import { getPaginateProducts } from '../utils/api/getPaginateProducts'
 import ProductCard from '../components/productCard/ProductCard'
 import { useLoginContext, useSearchContext } from '../context/userContext'
-import Loading from './admin/loading'
+import Loading from './loading'
 
 export default function Home() {
 	const [products, setProducts] = useState<Product[] | undefined>([])

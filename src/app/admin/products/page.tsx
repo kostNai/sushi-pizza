@@ -4,7 +4,7 @@ import { IoAdd } from 'react-icons/io5'
 import ProductTable from '../../../components/productsTable/ProductsTable'
 import { to } from '../../../routes/products/to'
 import styles from './styles.module.scss'
-import Loading from '@/app/admin/loading'
+import Loading from '@/app/loading'
 
 export default async function RootProducts() {
 	return (

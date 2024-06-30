@@ -7,6 +7,7 @@ const LoginContext = createContext<any>(undefined)
 const BasketContext = createContext<any>(0)
 const ProductContext = createContext<any>(undefined)
 const SearchProductContext = createContext<any>(undefined)
+const ErrorsContext = createContext<any>('')
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
 	const [loginContext, setLoginContext] = useState<string | undefined>('')
@@ -19,6 +20,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 	const [searchProductContext, setSearchProductContext] = useState<
 		boolean | undefined
 	>(false)
+	const [error, setError] = useState('')
 
 	return (
 		<LoginContext.Provider value={[loginContext, setLoginContext]}>
@@ -27,7 +29,9 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 					<SearchProductContext.Provider
 						value={[searchProductContext, setSearchProductContext]}
 					>
-						{children}
+						<ErrorsContext.Provider value={[error, setError]}>
+							{children}
+						</ErrorsContext.Provider>
 					</SearchProductContext.Provider>
 				</ProductContext.Provider>
 			</BasketContext.Provider>
@@ -46,4 +50,7 @@ export function useProductContext() {
 }
 export function useSearchContext() {
 	return useContext(SearchProductContext)
+}
+export function errorsContext() {
+	return useContext(ErrorsContext)
 }

@@ -23,6 +23,7 @@ export default function Header() {
 	const path = usePathname()
 	const [count, setCount] = useBasketContext()
 	const [searchProductContext, setSearchProductContext] = useSearchContext()
+	const [version, setVersion] = useState(0)
 
 	useEffect(() => {
 		setToken(localStorage.getItem('token'))
@@ -36,17 +37,23 @@ export default function Header() {
 				setLoginContext('')
 			}
 			setLoginContext(payload.login)
+		} else {
+			setLoginContext('')
 		}
-	}, [loginContext, count])
+	}, [loginContext, count, token])
 
 	const logoutHandler = async () => {
-		const res = await logout(token).then((data) => {
-			if (data.status === 200) {
-				localStorage.removeItem('token')
-				setLoginContext('')
-				router.push('/')
-			}
-		})
+		const res = await logout(token)
+			.then((data) => {
+				if (data.status === 200) {
+					localStorage.removeItem('token')
+					setLoginContext('')
+					router.push('/')
+				}
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 		return res
 	}
 

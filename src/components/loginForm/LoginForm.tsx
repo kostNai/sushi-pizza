@@ -2,14 +2,16 @@
 
 import { FormEvent, useState } from 'react'
 import styles from './LoginForm.module.scss'
-import { useLoginContext } from '../../context/userContext'
+import { errorsContext, useLoginContext } from '../../context/userContext'
 import { useRouter } from 'next/navigation'
 import { login } from '../../utils/api/fetchLogin'
 import Link from 'next/link'
+import { PiWarningCircle } from 'react-icons/pi'
 
 export default function LoginForm() {
 	const [userLogin, setUserLogin] = useState<string | undefined>('')
 	const [password, setPassword] = useState<string | undefined>('')
+	const [error, setError] = errorsContext()
 
 	const [loginContext, setLoginContext] = useLoginContext()
 
@@ -18,38 +20,41 @@ export default function LoginForm() {
 	const onLoginHandler = (e: FormEvent) => {
 		e.preventDefault()
 
-		const res = login(userLogin, password).then((res) => {
-			const status = res.data.status
+		const res = login(userLogin, password)
+			.then((res) => {
+				const status = res.data.status
+				if (status) {
+					const token: string = res.data.access_token
+					localStorage.setItem('token', token)
+					setUserLogin('')
+					setPassword('')
+					const arrayToken = token.split('.')
+					const tokenPayload = JSON.parse(atob(arrayToken[1]))
+					setLoginContext(tokenPayload.login)
+					const role = tokenPayload.role
 
-			if (status) {
-				const token: string = res.data.access_token
-				localStorage.setItem('token', token)
-				setUserLogin('')
-				setPassword('')
-				const arrayToken = token.split('.')
-				const tokenPayload = JSON.parse(atob(arrayToken[1]))
-				setLoginContext(tokenPayload.login)
-				const role = tokenPayload.role
+					if (role) {
+						switch (role) {
+							case 'root':
+								router.push('/admin')
+								break
+							case 'admin':
+								router.push('/admin')
+								break
 
-				if (role) {
-					switch (role) {
-						case 'root':
-							router.push('/admin')
-							break
-						case 'admin':
-							router.push('/admin')
-							break
+							case 'user':
+								router.push('/profile')
+								break
 
-						case 'user':
-							router.push('/profile')
-							break
-
-						default:
-							break
+							default:
+								break
+						}
 					}
 				}
-			} else console.log(res.data.message)
-		})
+			})
+			.catch((err) => {
+				setError(err.response.data.message)
+			})
 	}
 
 	return (
@@ -73,6 +78,12 @@ export default function LoginForm() {
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 					/>
+					{error && (
+						<div className={styles.errorsContainer}>
+							<PiWarningCircle size={24} className={styles.errorsIcon} />
+							<p className={styles.errors}>{error}</p>
+						</div>
+					)}
 					<button className={styles.loginBtn} type="submit">
 						Вхід
 					</button>
