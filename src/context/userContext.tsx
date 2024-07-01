@@ -1,13 +1,15 @@
 'use client'
 
 import { createContext, useContext, useState } from 'react'
-import { Product } from '../app/types/Product'
+import { Product } from '@/types/Product'
+import { User } from '@/types/User'
 
 const LoginContext = createContext<any>(undefined)
 const BasketContext = createContext<any>(0)
 const ProductContext = createContext<any>(undefined)
 const SearchProductContext = createContext<any>(undefined)
 const ErrorsContext = createContext<any>('')
+const UserContext = createContext<any>(undefined)
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
 	const [loginContext, setLoginContext] = useState<string | undefined>('')
@@ -21,6 +23,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 		boolean | undefined
 	>(false)
 	const [error, setError] = useState('')
+	const [user, setUser] = useState<User | undefined>()
 
 	return (
 		<LoginContext.Provider value={[loginContext, setLoginContext]}>
@@ -30,7 +33,9 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 						value={[searchProductContext, setSearchProductContext]}
 					>
 						<ErrorsContext.Provider value={[error, setError]}>
-							{children}
+							<UserContext.Provider value={[user, setUser]}>
+								{children}
+							</UserContext.Provider>
 						</ErrorsContext.Provider>
 					</SearchProductContext.Provider>
 				</ProductContext.Provider>
@@ -53,4 +58,7 @@ export function useSearchContext() {
 }
 export function errorsContext() {
 	return useContext(ErrorsContext)
+}
+export function userContext() {
+	return useContext(UserContext)
 }

@@ -1,0 +1,44 @@
+.addressForm {
+	margin-top: 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+.addressLabel {
+	display: flex;
+	justify-content: space-between;
+	width: 60%;
+	input {
+		outline: none;
+		border: none;
+		margin-left: 8px;
+		font-size: 16px;
+		padding: 4px 16px;
+		box-shadow: #e4c59e 0px 1px 3px 0px, #e4c59e 0px 0px 0px 1px;
+		border-radius: 5px;
+		&:focus {
+			outline: none;
+			box-shadow: #e4c59e 0px 1px 3px 4px, #e4c59e 0px 0px 0px 1px;
+		}
+	}
+}
+.btnsContainer {
+	margin-top: 16px;
+	display: flex;
+	gap: 8px;
+}
+.btn {
+	border: none;
+	border-radius: 5px;
+	font-size: 14px;
+	padding: 4px 8px;
+	cursor: pointer;
+	transition: 300ms;
+	box-shadow: #e4c59e 0px 1px 3px 0px, #e4c59e 0px 0px 0px 1px;
+	&:hover {
+		box-shadow: #e4c59e 0px 1px 3px 3px, #e4c59e 0px 0px 0px 1px;
+	}
+	&:active {
+		scale: 0.9;
+	}
+}

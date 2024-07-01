@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from 'react'
 import styles from './LoginForm.module.scss'
-import { errorsContext, useLoginContext } from '../../context/userContext'
+import { errorsContext, userContext } from '../../context/userContext'
 import { useRouter } from 'next/navigation'
 import { login } from '../../utils/api/fetchLogin'
 import Link from 'next/link'
@@ -12,8 +12,7 @@ export default function LoginForm() {
 	const [userLogin, setUserLogin] = useState<string | undefined>('')
 	const [password, setPassword] = useState<string | undefined>('')
 	const [error, setError] = errorsContext()
-
-	const [loginContext, setLoginContext] = useLoginContext()
+	const [user, setUser] = userContext()
 
 	const router = useRouter()
 
@@ -30,7 +29,7 @@ export default function LoginForm() {
 					setPassword('')
 					const arrayToken = token.split('.')
 					const tokenPayload = JSON.parse(atob(arrayToken[1]))
-					setLoginContext(tokenPayload.login)
+					setUser(user)
 					const role = tokenPayload.role
 
 					if (role) {

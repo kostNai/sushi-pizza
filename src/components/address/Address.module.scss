@@ -1,0 +1,35 @@
+.addressInfo {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+.addressTitle {
+	width: fit-content;
+	border-bottom: 1px solid #e4c59e;
+}
+.addressSpan {
+	font-weight: 600;
+	color: #cf7d12;
+}
+.btnsContainer {
+	margin-top: 32px;
+	display: flex;
+	gap: 16px;
+
+	button {
+		width: fit-content;
+		padding: 4px 32px;
+		font-size: 16px;
+		border: none;
+		border-radius: 7px;
+		box-shadow: #e4c59e 0px 1px 3px 0px, #e4c59e 0px 0px 0px 1px;
+		cursor: pointer;
+		transition: 300ms;
+		&:hover {
+			box-shadow: #e4c59e 0px 1px 3px 3px, #e4c59e 0px 0px 0px 1px;
+		}
+		&:active {
+			scale: 0.9;
+		}
+	}
+}

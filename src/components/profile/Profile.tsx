@@ -1,15 +1,17 @@
 'use client'
 
 import { User } from '@/src/app/types/User'
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, { FormEvent, useEffect, useRef, useState } from 'react'
 import { getCurrentUser } from '@/src/utils/api/getCurrentUser'
 import styles from './Profile.module.scss'
 import Image from 'next/image'
-import EditUserForm from '../editUserForm/EditUserForm'
+import EditUserForm from '@/components/editUserForm/EditUserForm'
 import { editCurrentUser } from '@/src/utils/api/editCurrentUser'
 import { ToastType } from '@/src/app/types/ToastType'
 import { refresh } from '@/src/utils/api/refresh'
+import Address from '@/components/address/Address'
 import Toast from '../UI/Toast.tsx/Toast'
+import { AddressType } from '@/src/app/types/Address'
 
 export default function Profile() {
 	const [token, setToken] = useState('')
@@ -28,12 +30,17 @@ export default function Profile() {
 	const [message, setMessage] = useState('')
 	const [isToast, setIsToast] = useState(false)
 	const [version, setVersion] = useState(0)
+	const [address, setAddress] = useState<AddressType | undefined>()
+	const hiddenFileInput = useRef(null)
 
 	useEffect(() => {
 		setToken(localStorage.getItem('token'))
 		if (token) {
 			getCurrentUser(token).then((data) => {
-				setCurrentUser(data.data.user)
+				console.log(data.data.user[0])
+
+				setCurrentUser(data.data.user[0])
+				setAddress(data.data.user[0].address)
 			})
 		}
 	}, [token, version])
@@ -99,11 +106,16 @@ export default function Profile() {
 		setName(name)
 		setIsEdit(true)
 	}
+	const handleClick = (event) => {
+		console.log(hiddenFileInput.current)
+
+		hiddenFileInput.current.click()
+	}
 	return (
 		currentUser && (
 			<section className={styles.profileContainer}>
 				<div className={styles.profileUserInfo}>
-					<div className={styles.profileImg}>
+					<div className={styles.profileImgContainer}>
 						<Image
 							width={300}
 							height={200}
@@ -113,19 +125,28 @@ export default function Profile() {
 									? currentUser?.user_image
 									: '/profile-img.svg'
 							}
+							className={styles.profileImg}
 						/>
-						<label htmlFor="userImg" className={styles.changeImgLabel}>
-							Змінити фото
-							<input
-								type="file"
-								name="userImg"
-								onChange={(e) => setFile(e.target.files[0])}
-							/>
-							<button onClick={editUserHandler}>Змінити</button>
-						</label>
+						<div className={styles.fileUpload}>
+							<label htmlFor="userImg" className={styles.changeImgLabel}>
+								<input
+									type="file"
+									name="userImg"
+									onChange={(e) => setFile(e.target.files[0])}
+									className={styles.profileImgInput}
+									ref={hiddenFileInput}
+								/>
+								<span onClick={handleClick} className={styles.fileSpan}>
+									Обрати фото
+								</span>
+							</label>
+						</div>
+						<button onClick={editUserHandler} className={styles.btn}>
+							Змінити
+						</button>
 					</div>
 					<div className={styles.profileUserTextInfo}>
-						<p>
+						<div>
 							Ім&apos;я -
 							{currentUser?.name ? (
 								<div className={styles.profileFieldContainer}>
@@ -136,6 +157,7 @@ export default function Profile() {
 										onClick={() => {
 											onClickHandler('name')
 										}}
+										className={styles.btn}
 									>
 										Змінити
 									</button>
@@ -145,49 +167,64 @@ export default function Profile() {
 									onClick={() => {
 										onClickHandler('name')
 									}}
+									className={styles.btn}
 								>
 									Додати ім&apos;я
 								</button>
 							)}
-						</p>
-						<p>
+						</div>
+						<div>
 							Логін -
 							{currentUser?.login ? (
 								<div className={styles.profileFieldContainer}>
 									<span className={styles.profileSpan}>
 										{currentUser?.login}
 									</span>
-									<button onClick={() => onClickHandler('login')}>
+									<button
+										onClick={() => onClickHandler('login')}
+										className={styles.btn}
+									>
 										Змінити
 									</button>
 								</div>
 							) : (
-								<button onClick={() => onClickHandler('login')}>
+								<button
+									onClick={() => onClickHandler('login')}
+									className={styles.btn}
+								>
 									Додати ім&apos;я
 								</button>
 							)}
-						</p>
+						</div>
 
-						<p>
+						<div>
 							Номер телефону -
 							{currentUser?.phone_number ? (
 								<div className={styles.profileFieldContainer}>
 									<span className={styles.profileSpan}>
 										{currentUser?.phone_number}
 									</span>
-									<button onClick={() => onClickHandler('phone_number')}>
+									<button
+										onClick={() => onClickHandler('phone_number')}
+										className={styles.btn}
+									>
 										Змінити
 									</button>
 								</div>
 							) : (
-								<button onClick={() => onClickHandler('phone_number')}>
+								<button
+									onClick={() => onClickHandler('phone_number')}
+									className={styles.btn}
+								>
 									Додати номер телефону
 								</button>
 							)}
-						</p>
+						</div>
 					</div>
 				</div>
-				<div></div>
+				<div className={styles.addressContainer}>
+					{address && <Address address={address} />}
+				</div>
 				{isEdit && (
 					<EditUserForm
 						onChange={(e) => onChangeHandler(e, name)}

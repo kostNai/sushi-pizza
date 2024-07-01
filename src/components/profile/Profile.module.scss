@@ -7,14 +7,19 @@
 .profileUserInfo {
 	display: flex;
 	flex-direction: column;
+	padding: 32px;
 }
-.profileImg {
+.profileImgContainer {
 	width: fit-content;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	padding: 16px;
+	align-items: flex-start;
+	padding: 16px 0;
 	border-bottom: 1px solid #e4c59e;
+}
+.profileImg {
+	border-radius: 10px;
 }
 .changeImgLabel {
 	display: flex;
@@ -26,28 +31,60 @@
 	display: flex;
 	flex-direction: column;
 	gap: 32px;
-
-	button {
-		border: none;
-		border-radius: 5px;
-		font-size: 16px;
-		padding: 4px 8px;
-		margin-left: 8px;
-		cursor: pointer;
-		transition: 300ms;
-		box-shadow: #e4c59e 0px 1px 3px 0px;
-		&:hover {
-			box-shadow: #e4c59e 0px 1px 3px 3px, #e4c59e 0px 0px 0px 1px;
-		}
-		&:active {
-			scale: 0.9;
-		}
+}
+.btn {
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	padding: 4px 8px;
+	// margin-left: 8px;
+	cursor: pointer;
+	transition: 300ms;
+	box-shadow: #e4c59e 0px 1px 3px 0px;
+	&:hover {
+		box-shadow: #e4c59e 0px 1px 3px 3px, #e4c59e 0px 0px 0px 1px;
+	}
+	&:active {
+		scale: 0.9;
 	}
 }
 .profileSpan {
 	font-weight: 600;
+	color: #cf7d12;
 	margin-right: 8px;
 }
 .profileFieldContainer {
 	display: inline-block;
+}
+.fileUpload {
+	display: flex;
+	justify-content: center;
+	width: fit-content;
+	margin: 16px 0;
+	cursor: pointer;
+	border-radius: 3px;
+	text-align: center;
+	transition: 300ms;
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.fileUpload input[type='file'] {
+	display: none; /* Обязательно скрываем настоящий Input File */
+}
+.fileUploadlabel {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+}
+.fileSpan {
+	cursor: pointer;
+}
+.addressContainer {
+	padding: 32px;
 }
