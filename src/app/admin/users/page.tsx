@@ -30,7 +30,7 @@ const TABLE_ITEMS = [
 	{ name: 'Дії', abbr: 'actions' }
 ]
 
-export default function RootUsers() {
+export default function AdminUser() {
 	const [orderOption, setOrderOption] = useState<OrderOption | undefined>('asc')
 	const [orderParam, setOrderParam] = useState<OrderParam | undefined>()
 	const [users, setUsers] = useState<User[] | undefined>([])

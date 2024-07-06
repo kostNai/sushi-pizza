@@ -5,9 +5,11 @@ import AddressForm from '../addressForm/AddressForm'
 
 type Props = {
 	address: AddressType
+	version: number
+	setVersion: (version: number) => void
 }
 
-export default function Address({ address }: Props) {
+export default function Address({ address, version, setVersion }: Props) {
 	const [isChangeAddress, setIschangeAddress] = useState(false)
 	return (
 		<div className={styles.container}>
@@ -35,7 +37,13 @@ export default function Address({ address }: Props) {
 				</button>
 				<button>Видалити адресу</button>
 			</div>
-			{isChangeAddress && <AddressForm currentAddress={address} />}
+			{isChangeAddress && (
+				<AddressForm
+					currentAddress={address}
+					version={version}
+					setVersion={setVersion}
+				/>
+			)}
 		</div>
 	)
 }

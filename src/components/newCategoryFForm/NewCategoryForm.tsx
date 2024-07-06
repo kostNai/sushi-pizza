@@ -1,17 +1,18 @@
 import { FormEvent } from 'react'
 import styles from './NewCategoryForm.module.scss'
+import { Category } from '@/src/app/types/Category'
 
 type Props = {
 	isCategoryAdd: boolean
 	onSubmit: (e: FormEvent) => void
-	value: string
+	category: Category
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export default function NewCategoryForm({
 	isCategoryAdd,
 	onSubmit,
-	value,
+	category,
 	onChange
 }: Props) {
 	return (
@@ -25,7 +26,17 @@ export default function NewCategoryForm({
 							type="text"
 							name="category_name"
 							placeholder="Нова категорія"
-							value={value}
+							value={category.category_name}
+							onChange={onChange}
+						/>
+					</label>
+					<label htmlFor="slug">
+						Додайте "slug"
+						<input
+							type="text"
+							name="slug"
+							placeholder="slug"
+							value={category.slug}
 							onChange={onChange}
 						/>
 					</label>

@@ -27,7 +27,10 @@ const AddProductForm = ({
 }: Props) => {
 	const token = localStorage.getItem('token')
 	const [isCategoryAdd, setIsCategoryAdd] = useState<boolean | undefined>(false)
-	const [newCategoryName, setNewCategoryName] = useState<string | undefined>('')
+	const [newCategory, setNewCategory] = useState<Category | undefined>({
+		category_name: '',
+		slug: ''
+	})
 	const [toastType, setToastType] = useState<ToastType | undefined>(null)
 	const [isToast, setIsToast] = useState<boolean | undefined>(false)
 	const [message, setMessage] = useState<string | undefined>('')
@@ -48,13 +51,13 @@ const AddProductForm = ({
 
 	const addCategoryHandler = (e: FormEvent) => {
 		e.preventDefault()
-		const res = addNewCategory(token, newCategoryName)
+		const res = addNewCategory(token, newCategory)
 			.then((data) => {
 				if (data.status === 200) {
 					setIsToast(true)
 					setToastType('access')
 					setMessage('Категорія додана успішно')
-					setNewCategoryName('')
+					setNewCategory({ category_name: '', slug: '' })
 					refresh(token).then((data) =>
 						localStorage.setItem('token', data.data.access_token)
 					)
@@ -67,6 +70,9 @@ const AddProductForm = ({
 				setMessage(err.response.data.message)
 			})
 		resetToastData()
+	}
+	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setNewCategory({ ...newCategory, [e.target.name]: e.target.value })
 	}
 	return (
 		<div className={styles.addProductContainer}>
@@ -174,8 +180,8 @@ const AddProductForm = ({
 				<NewCategoryForm
 					isCategoryAdd={isCategoryAdd}
 					onSubmit={addCategoryHandler}
-					onChange={(e) => setNewCategoryName(e.target.value)}
-					value={newCategoryName}
+					onChange={onChangeHandler}
+					category={newCategory}
 				/>
 			</div>
 		</div>

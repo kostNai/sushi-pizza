@@ -5,9 +5,15 @@ import { editAddress } from '@/src/utils/api/editAddress'
 
 type Props = {
 	currentAddress: AddressType
+	version: number
+	setVersion: (version: number) => void
 }
 
-export default function AddressForm({ currentAddress }: Props) {
+export default function AddressForm({
+	currentAddress,
+	version,
+	setVersion
+}: Props) {
 	const token = localStorage.getItem('token')
 	const [address, setAddress] = useState<AddressType | undefined>({
 		city: '',
@@ -15,14 +21,28 @@ export default function AddressForm({ currentAddress }: Props) {
 		house_number: '',
 		flat_number: ''
 	})
+	const isAddressEmpty: boolean =
+		!address.city &&
+		!address.street_name &&
+		!address.house_number &&
+		!address.flat_number
 
 	const onChangeInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setAddress({ ...address, [e.target.name]: e.target.value })
 	}
 	const onSubmitHandler = async (e: FormEvent) => {
 		e.preventDefault()
+		// console.log(isAddressEmpty)
+
 		try {
 			await editAddress(token, currentAddress.id, address)
+			setVersion(version + 1)
+			setAddress({
+				city: '',
+				street_name: '',
+				house_number: '',
+				flat_number: ''
+			})
 		} catch (error) {}
 	}
 	return (
@@ -65,7 +85,11 @@ export default function AddressForm({ currentAddress }: Props) {
 					/>
 				</label>
 				<div className={styles.btnsContainer}>
-					<button type="submit" className={styles.btn}>
+					<button
+						type="submit"
+						className={styles.btn}
+						disabled={isAddressEmpty}
+					>
 						Змінити
 					</button>
 					<button type="reset" className={styles.btn}>

@@ -9,7 +9,7 @@ import { editUser } from '@/utils/api/editUser'
 import Toast from '@/components/UI/Toast.tsx/Toast'
 import { ToastType } from '@/types/ToastType'
 
-export default function RootProfile() {
+export default function AdminProfile() {
 	const [token, setToken] = useState<string | undefined>('')
 	const [isEdit, setIsEdit] = useState<boolean | undefined>(false)
 	const [version, setVersion] = useState<number | undefined>(0)

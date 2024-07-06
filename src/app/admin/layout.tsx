@@ -24,8 +24,7 @@ export default function RootUserLayout({
 	}, [])
 
 	return (
-		role === 'root' ||
-		(role === 'admin' && (
+		(role === 'root' || role === 'admin') && (
 			<section className={styles.rootLayout}>
 				<nav className={styles.rootMenu}>
 					<ul className={styles.rootList}>
@@ -57,6 +56,6 @@ export default function RootUserLayout({
 				</nav>
 				<section>{children}</section>
 			</section>
-		))
+		)
 	)
 }

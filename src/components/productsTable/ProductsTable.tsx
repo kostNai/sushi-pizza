@@ -1,14 +1,6 @@
 'use client'
 
-import React, {
-	FormEvent,
-	useEffect,
-	useRef,
-	useState,
-	ElementRef,
-	MutableRefObject,
-	LegacyRef
-} from 'react'
+import React, { FormEvent, useEffect, useRef, useState } from 'react'
 import { FaLongArrowAltDown, FaLongArrowAltUp } from 'react-icons/fa'
 import styles from './ProductsTable.module.scss'
 import { Product } from '@/types/Product'
@@ -51,7 +43,7 @@ const ProductTable = () => {
 	const [products, setProducts] = useState<Product[] | undefined>([])
 	const [productId, setProductId] = useState<string | undefined>('')
 	const [version, setVersion] = useState(0)
-	const refs = useRef<HTMLTableCellElement>(null)
+	const refs = useRef<HTMLTableCellElement[]>([])
 	const token = localStorage.getItem('token')
 
 	useEffect(() => {
@@ -121,85 +113,89 @@ const ProductTable = () => {
 		order_option: OrderOption,
 		indx: number
 	) => {
-		orderParam = refs.current[indx].abbr
-		setOrderParam(orderParam)
-		setOrderOption(orderOption === 'asc' ? 'desc' : 'asc')
-		await getOrderedProducts(orderParam, order_option).then((data) => {
-			setProducts(data.data.products)
-		})
+		if (refs.current) {
+			orderParam = refs.current[indx].abbr
+			setOrderParam(orderParam)
+			setOrderOption(orderOption === 'asc' ? 'desc' : 'asc')
+			await getOrderedProducts(orderParam, order_option).then((data) => {
+				setProducts(data.data.products)
+			})
+		}
 	}
 	return (
-		<div className={styles.productsContainer}>
-			<Toast message={message} isToast={isToast} toastType={toastType} />
-			<table className={styles.productsTable}>
-				<thead>
-					<tr>
-						{TABLE_ITEMS.map((item, indx) => (
-							<th
-								key={indx}
-								ref={(el: HTMLTableCellElement) => {
-									refs.current[indx] = el
-								}}
-								onClick={() =>
-									orderProductsHandler(orderParam, orderOption, indx)
-								}
-								abbr={item.abbr}
-							>
-								{item.name}
+		products && (
+			<div className={styles.productsContainer}>
+				<Toast message={message} isToast={isToast} toastType={toastType} />
+				<table className={styles.productsTable}>
+					<thead>
+						<tr>
+							{TABLE_ITEMS.map((item, indx) => (
+								<th
+									key={indx}
+									ref={(el) => {
+										refs.current[indx] = el
+									}}
+									onClick={() =>
+										orderProductsHandler(orderParam, orderOption, indx)
+									}
+									abbr={item.abbr}
+								>
+									{item.name}
 
-								{refs.current[indx]?.abbr == orderParam ? (
-									orderOption === 'desc' ? (
-										<FaLongArrowAltUp />
+									{refs.current && refs?.current[indx]?.abbr == orderParam ? (
+										orderOption === 'desc' ? (
+											<FaLongArrowAltUp />
+										) : (
+											<FaLongArrowAltDown />
+										)
 									) : (
-										<FaLongArrowAltDown />
-									)
-								) : (
-									''
-								)}
-							</th>
-						))}
-					</tr>
-				</thead>
-				<tbody>
-					{products.map((product: Product) => (
-						<tr key={product.id}>
-							<td>{product.id}</td>
-							<td>{product.product_name}</td>
-							<td>{product.product_desc}</td>
-							<td>{`${product.product_price} грн`}</td>
-							<td>{`${product.product_weight}гр`}</td>
-							<td>{product.category?.category_name}</td>
-							<td>
-								<div className={styles.btns}>
-									<button
-										className={`${styles.btn} ${styles.deleteProductBtn}`}
-										onClick={() => deleteProductHandler(product.id)}
-										disabled={isLoading}
-									>
-										Видалити
-									</button>
-									<button
-										className={`${styles.btn} ${styles.editProductBtn}`}
-										onClick={() => editProductstart(product.id)}
-									>
-										Змінити
-									</button>
-								</div>
-							</td>
+										''
+									)}
+								</th>
+							))}
 						</tr>
-					))}
-				</tbody>
-			</table>
-			{isEdit && (
-				<EditProductForm
-					product={newProduct}
-					onClick={() => setIsEdit(false)}
-					onSubmit={(e) => editProductHandler(e, productId)}
-					onChangeInput={(e) => onChangeInputHandler(e)}
-					onChangeTextArea={(e) => onChangeTextAreaHandler(e)}
-				/>
-			)}
-		</div>
+					</thead>
+					<tbody>
+						{products.map((product: Product) => (
+							<tr key={product.id}>
+								<td>{product.id}</td>
+								<td>{product.product_name}</td>
+								<td>{product.product_desc}</td>
+								<td>{`${product.product_price} грн`}</td>
+								<td>{`${product.product_weight}гр`}</td>
+								<td>{product.category?.category_name}</td>
+								<td>
+									<div className={styles.btns}>
+										<button
+											className={`${styles.btn} ${styles.deleteProductBtn}`}
+											onClick={() => deleteProductHandler(product.id)}
+											disabled={isLoading}
+										>
+											Видалити
+										</button>
+										<button
+											className={`${styles.btn} ${styles.editProductBtn}`}
+											onClick={() => editProductstart(product.id)}
+										>
+											Змінити
+										</button>
+									</div>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+				{isEdit && (
+					<EditProductForm
+						product={newProduct}
+						onClick={() => setIsEdit(false)}
+						onSubmit={(e) => editProductHandler(e, productId)}
+						onChangeInput={(e) => onChangeInputHandler(e)}
+						onChangeTextArea={(e) => onChangeTextAreaHandler(e)}
+					/>
+				)}
+			</div>
+		)
 	)
 }
 export default ProductTable

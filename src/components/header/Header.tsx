@@ -101,7 +101,9 @@ export default function Header() {
 						<div>
 							Привіт,{' '}
 							<Link
-								href={role === 'root' ? '/root' : '/profile'}
+								href={
+									role === 'root' || role === 'admin' ? '/admin' : '/profile'
+								}
 								className={styles.userLink}
 							>
 								{loginContext}

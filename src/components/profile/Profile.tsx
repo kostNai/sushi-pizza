@@ -25,20 +25,18 @@ export default function Profile() {
 		user_image: ''
 	})
 	const [file, setFile] = useState<File | undefined>()
-	const form = new FormData()
 	const [toastType, setToastType] = useState<ToastType | undefined>()
 	const [message, setMessage] = useState('')
 	const [isToast, setIsToast] = useState(false)
 	const [version, setVersion] = useState(0)
 	const [address, setAddress] = useState<AddressType | undefined>()
+	const form = new FormData()
 	const hiddenFileInput = useRef(null)
 
 	useEffect(() => {
 		setToken(localStorage.getItem('token'))
 		if (token) {
 			getCurrentUser(token).then((data) => {
-				console.log(data.data.user[0])
-
 				setCurrentUser(data.data.user[0])
 				setAddress(data.data.user[0].address)
 			})
@@ -106,9 +104,7 @@ export default function Profile() {
 		setName(name)
 		setIsEdit(true)
 	}
-	const handleClick = (event) => {
-		console.log(hiddenFileInput.current)
-
+	const handleClick = () => {
 		hiddenFileInput.current.click()
 	}
 	return (
@@ -223,7 +219,13 @@ export default function Profile() {
 					</div>
 				</div>
 				<div className={styles.addressContainer}>
-					{address && <Address address={address} />}
+					{address && (
+						<Address
+							address={address}
+							version={version}
+							setVersion={setVersion}
+						/>
+					)}
 				</div>
 				{isEdit && (
 					<EditUserForm

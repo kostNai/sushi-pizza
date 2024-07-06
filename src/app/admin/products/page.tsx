@@ -6,11 +6,14 @@ import { to } from '../../../routes/products/to'
 import styles from './styles.module.scss'
 import Loading from '@/app/loading'
 
-export default async function RootProducts() {
+export default async function AdminProducts() {
 	return (
 		<div>
 			<section>
-				<Link href={`/root/${to.newProduct}`} className={styles.newProductLink}>
+				<Link
+					href={`/admin/${to.newProduct}`}
+					className={styles.newProductLink}
+				>
 					<IoAdd className={styles.newProductIcon} />
 					Додати новий продукт
 				</Link>
