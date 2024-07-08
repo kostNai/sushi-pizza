@@ -10,6 +10,8 @@ const ProductContext = createContext<any>(undefined)
 const SearchProductContext = createContext<any>(undefined)
 const ErrorsContext = createContext<any>('')
 const UserContext = createContext<any>(undefined)
+const IsCartOpenContext = createContext<any>(false)
+const OrderIdContext = createContext<any>(0)
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
 	const [loginContext, setLoginContext] = useState<string | undefined>('')
@@ -24,6 +26,8 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 	>(false)
 	const [error, setError] = useState('')
 	const [user, setUser] = useState<User | undefined>()
+	const [isCartOpen, setIsCartOpen] = useState(false)
+	const [orderId, setOrderId] = useState(0)
 
 	return (
 		<LoginContext.Provider value={[loginContext, setLoginContext]}>
@@ -34,7 +38,11 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 					>
 						<ErrorsContext.Provider value={[error, setError]}>
 							<UserContext.Provider value={[user, setUser]}>
-								{children}
+								<IsCartOpenContext.Provider value={[isCartOpen, setIsCartOpen]}>
+									<OrderIdContext.Provider value={[orderId, setOrderId]}>
+										{children}
+									</OrderIdContext.Provider>
+								</IsCartOpenContext.Provider>
 							</UserContext.Provider>
 						</ErrorsContext.Provider>
 					</SearchProductContext.Provider>
@@ -61,4 +69,10 @@ export function errorsContext() {
 }
 export function userContext() {
 	return useContext(UserContext)
+}
+export function isCartOpenContext() {
+	return useContext(IsCartOpenContext)
+}
+export function orderIdContext() {
+	return useContext(OrderIdContext)
 }

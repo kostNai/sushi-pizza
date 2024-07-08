@@ -2,8 +2,12 @@
 
 import { FormEvent, useState } from 'react'
 import styles from './LoginForm.module.scss'
-import { errorsContext, userContext } from '../../context/userContext'
-import { useRouter } from 'next/navigation'
+import {
+	errorsContext,
+	useLoginContext,
+	userContext
+} from '../../context/userContext'
+import { redirect, useRouter } from 'next/navigation'
 import { login } from '../../utils/api/fetchLogin'
 import Link from 'next/link'
 import { PiWarningCircle } from 'react-icons/pi'
@@ -12,7 +16,7 @@ export default function LoginForm() {
 	const [userLogin, setUserLogin] = useState<string | undefined>('')
 	const [password, setPassword] = useState<string | undefined>('')
 	const [error, setError] = errorsContext()
-	const [user, setUser] = userContext()
+	const [loginContext, setLoginContext] = useLoginContext()
 
 	const router = useRouter()
 
@@ -29,26 +33,26 @@ export default function LoginForm() {
 					setPassword('')
 					const arrayToken = token.split('.')
 					const tokenPayload = JSON.parse(atob(arrayToken[1]))
-					setUser(user)
+					setLoginContext(tokenPayload.login)
 					const role = tokenPayload.role
+					router.push('/')
+					// if (role) {
+					// 	switch (role) {
+					// 		case 'root':
+					// 			router.push('/admin')
+					// 			break
+					// 		case 'admin':
+					// 			router.push('/admin')
+					// 			break
 
-					if (role) {
-						switch (role) {
-							case 'root':
-								router.push('/admin')
-								break
-							case 'admin':
-								router.push('/admin')
-								break
+					// 		case 'user':
+					// 			router.push('/profile')
+					// 			break
 
-							case 'user':
-								router.push('/profile')
-								break
-
-							default:
-								break
-						}
-					}
+					// 		default:
+					// 			break
+					// 	}
+					// }
 				}
 			})
 			.catch((err) => {

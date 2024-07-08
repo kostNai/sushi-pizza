@@ -9,6 +9,9 @@
 		display: flex;
 	}
 }
+.productInfo {
+	flex: 0 0 50%;
+}
 .productNameContainer {
 	margin-left: 24px;
 	flex-direction: column;
@@ -19,6 +22,9 @@
 	font-weight: 600;
 }
 .productTotalPrice {
+	display: flex;
+	justify-content: flex-end;
+	flex: 0 0 50%;
 	align-items: center;
 	gap: 32px;
 }
@@ -42,10 +48,22 @@
 		scale: 1.2;
 	}
 }
+.changeProductCount {
+	cursor: pointer;
+	transition: 300ms;
+	&:active {
+		scale: 0.6;
+	}
+}
+.productPriceContainer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 64px;
+	flex: 0 0 40%;
+}
+
 .productPrice {
 	font-size: 24px;
 	color: rgb(248, 93, 93);
-}
-.changeProductCount {
-	cursor: pointer;
 }

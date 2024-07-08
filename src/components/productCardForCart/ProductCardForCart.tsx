@@ -5,13 +5,36 @@ import { CiCircleRemove } from 'react-icons/ci'
 
 import { Product } from '../../app/types/Product'
 import styles from './ProductCardForCart.module.scss'
+import { orderIdContext } from '@/src/context/userContext'
+import { addToCart } from '@/src/utils/api/addToCart'
+import { removeFromCart } from '@/src/utils/api/removeFromCart'
 
 type Props = {
 	product: Product
-	onClick: () => void
+	version: number
+	setVersion: (version: number) => void
 }
+export default function ProductCardForCart({
+	product,
+	version,
+	setVersion
+}: Props) {
+	const [orderId, setOrderId] = orderIdContext()
 
-export default function ProductCardForCart({ product, onClick }: Props) {
+	const addToOrderHandler = async (productId: string) => {
+		const res = await addToCart(orderId, productId)
+		if (res.status === 200) {
+			console.log(res.data)
+			setVersion(version + 1)
+		}
+	}
+	const removeFromOrderHandler = async (productId: string) => {
+		const res = await removeFromCart(productId, orderId)
+		if (res.status === 200) {
+			console.log(res.data)
+			setVersion(version + 1)
+		}
+	}
 	return (
 		<div className={styles.productCard}>
 			<div className={styles.productInfo}>
@@ -30,12 +53,24 @@ export default function ProductCardForCart({ product, onClick }: Props) {
 			</div>
 			<div className={styles.productTotalPrice}>
 				<div className={styles.productCount}>
-					<GoPlus size={25} className={styles.changeProductCount} />
-					<p>1шт</p>
-					<FiMinus size={25} className={styles.changeProductCount} />
+					<FiMinus
+						size={25}
+						className={styles.changeProductCount}
+						onClick={() => removeFromOrderHandler(product.id)}
+					/>
+					<p>{product.pivot.product_quantity}</p>
+					<GoPlus
+						size={25}
+						className={styles.changeProductCount}
+						onClick={() => addToOrderHandler(product.id)}
+					/>
 				</div>
-				<p className={styles.productPrice}>{product.product_price}грн.</p>
-				<CiCircleRemove size={25} className={styles.removeProduct} />
+				<div className={styles.productPriceContainer}>
+					<p className={styles.productPrice}>
+						{product.pivot.product_quantity * product.product_price}грн.
+					</p>
+					<CiCircleRemove size={25} className={styles.removeProduct} />
+				</div>
 			</div>
 		</div>
 	)

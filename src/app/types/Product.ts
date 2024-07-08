@@ -1,4 +1,5 @@
 import { Category } from './Category'
+import { ProductPivot } from './ProductPivot'
 
 export type Product = {
 	id?: string
@@ -10,4 +11,5 @@ export type Product = {
 	sale_count?: number
 	category?: Category
 	category_name?: string
+	pivot?: ProductPivot
 }

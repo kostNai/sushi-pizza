@@ -2,13 +2,28 @@
 
 import Link from 'next/link'
 import ProductCardForCart from '../../components/productCardForCart/ProductCardForCart'
-import { useBasketContext, useProductContext } from '../../context/userContext'
+import {
+	orderIdContext,
+	useBasketContext,
+	useProductContext
+} from '../../context/userContext'
 import { Product } from '../types/Product'
 import styles from './styles.module.scss'
+import { useEffect, useState } from 'react'
+import { getProductFromOrder } from '@/src/utils/api/getProductsFromOrder'
 
 export default function Cart() {
 	const [productContext, setProductContext] = useProductContext()
 	const [addToCardContext, setAddToCardContext] = useBasketContext()
+	const [products, setProducts] = useState<Product[] | undefined>([])
+	const [orderId, setOrderId] = orderIdContext()
+	const [version, setVersion] = useState(0)
+
+	useEffect(() => {
+		const res = getProductFromOrder(orderId).then((data) => {
+			setProducts(data.data.products)
+		})
+	}, [version])
 
 	const removeAllProductsHandler = () => {
 		setProductContext([])
@@ -25,10 +40,11 @@ export default function Cart() {
 					</h4>
 				</div>
 				<div className={styles.cartProducts}>
-					{productContext.map((product: Product) => (
+					{products.map((product: Product) => (
 						<ProductCardForCart
 							product={product}
-							onClick={() => {}}
+							version={version}
+							setVersion={setVersion}
 							key={product.id}
 						/>
 					))}
