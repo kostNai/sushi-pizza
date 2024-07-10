@@ -5,36 +5,55 @@ import { CiCircleRemove } from 'react-icons/ci'
 
 import { Product } from '../../app/types/Product'
 import styles from './ProductCardForCart.module.scss'
-import { orderIdContext } from '@/src/context/userContext'
+// import { orderIdContext } from '@/src/context/userContext'
 import { addToCart } from '@/src/utils/api/addToCart'
 import { removeFromCart } from '@/src/utils/api/removeFromCart'
+import { deleteFromCart } from '@/src/utils/api/deleteFromCart'
+import { useBasketContext } from '@/src/context/userContext'
 
 type Props = {
 	product: Product
 	version: number
 	setVersion: (version: number) => void
 }
+const STICKS = 'Палички для їжі'
+const SAUCE = 'Соєвий соус'
+const BAG = 'Пакет'
 export default function ProductCardForCart({
 	product,
 	version,
 	setVersion
 }: Props) {
-	const [orderId, setOrderId] = orderIdContext()
+	const orderId = sessionStorage.getItem('orderId')
+	const [addToCardContext, setAddToCardContext] = useBasketContext()
+	const disabledItems =
+		(product.product_name.toLocaleLowerCase().match(STICKS.toLowerCase()) &&
+			product.pivot.product_quantity < 3) ||
+		(product.product_name.toLocaleLowerCase().match(SAUCE.toLowerCase()) &&
+			product.pivot.product_quantity < 3)
 
 	const addToOrderHandler = async (productId: string) => {
 		const res = await addToCart(orderId, productId)
 		if (res.status === 200) {
-			console.log(res.data)
+			setAddToCardContext(addToCardContext + 1)
 			setVersion(version + 1)
 		}
 	}
 	const removeFromOrderHandler = async (productId: string) => {
 		const res = await removeFromCart(productId, orderId)
 		if (res.status === 200) {
-			console.log(res.data)
+			setAddToCardContext(addToCardContext - 1)
 			setVersion(version + 1)
 		}
 	}
+	const deleteFromOrderHandler = async (productId: string) => {
+		const res = await deleteFromCart(productId, orderId)
+		if (res.status === 200) {
+			setVersion(version + 1)
+			setAddToCardContext(0)
+		}
+	}
+
 	return (
 		<div className={styles.productCard}>
 			<div className={styles.productInfo}>
@@ -66,10 +85,18 @@ export default function ProductCardForCart({
 					/>
 				</div>
 				<div className={styles.productPriceContainer}>
-					<p className={styles.productPrice}>
-						{product.pivot.product_quantity * product.product_price}грн.
-					</p>
-					<CiCircleRemove size={25} className={styles.removeProduct} />
+					{disabledItems ? (
+						<p className={styles.productFreePrice}>Безкоштовно</p>
+					) : (
+						<p className={styles.productPrice}>
+							{product.pivot.product_quantity * product.product_price} грн.
+						</p>
+					)}
+					<CiCircleRemove
+						size={25}
+						className={styles.removeProduct}
+						onClick={() => deleteFromOrderHandler(product.id)}
+					/>
 				</div>
 			</div>
 		</div>

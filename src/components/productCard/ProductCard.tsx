@@ -24,19 +24,24 @@ export default function ProductCard({ product, onClick }: Props) {
 	const [productContext, setProductContext] = useProductContext()
 	const [addToCardContext, setAddToCardContext] = useBasketContext()
 	const [isCartOpen, setIsCartOpen] = isCartOpenContext()
+
 	useEffect(() => {}, [orderId])
 
 	const addToCardHandler = async (product: Product) => {
 		if (!isCartOpen) {
 			const res = await addNewOrder(product.id.toString(), token)
 			if (res.status === 200) {
-				setOrderId(res.data.order.id.toString())
+				// setOrderId(res.data.order.id.toString())
+				sessionStorage.setItem('orderId', res.data.order.id)
 				setProductContext([...productContext, product])
 				setAddToCardContext(addToCardContext + 1)
 				setIsCartOpen(true)
 			}
 		} else {
-			const res = await addToCart(orderId, product.id.toString())
+			const res = await addToCart(
+				sessionStorage.getItem('orderId'),
+				product.id.toString()
+			)
 			if (res.status === 200) {
 				setProductContext([...productContext, product])
 				setAddToCardContext(addToCardContext + 1)

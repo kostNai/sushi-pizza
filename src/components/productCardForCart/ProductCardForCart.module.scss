@@ -60,10 +60,15 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: 64px;
-	flex: 0 0 40%;
+	flex: 0 0 50%;
 }
 
 .productPrice {
 	font-size: 24px;
 	color: rgb(248, 93, 93);
+}
+.productFreePrice {
+	color: #008b59;
+	font-weight: 600;
+	text-transform: lowercase;
 }

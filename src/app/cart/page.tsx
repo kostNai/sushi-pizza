@@ -2,36 +2,53 @@
 
 import Link from 'next/link'
 import ProductCardForCart from '../../components/productCardForCart/ProductCardForCart'
-import {
-	orderIdContext,
-	useBasketContext,
-	useProductContext
-} from '../../context/userContext'
+import { useBasketContext, useProductContext } from '../../context/userContext'
 import { Product } from '../types/Product'
 import styles from './styles.module.scss'
 import { useEffect, useState } from 'react'
 import { getProductFromOrder } from '@/src/utils/api/getProductsFromOrder'
+import { updateOrder } from '@/src/utils/api/updateOrder'
 
 export default function Cart() {
+	const token = localStorage.getItem('token')
 	const [productContext, setProductContext] = useProductContext()
 	const [addToCardContext, setAddToCardContext] = useBasketContext()
 	const [products, setProducts] = useState<Product[] | undefined>([])
-	const [orderId, setOrderId] = orderIdContext()
+	const [orderId, setOrderId] = useState<string | undefined>('')
 	const [version, setVersion] = useState(0)
+	const [totalPrice, setTotalPrice] = useState(0)
 
 	useEffect(() => {
-		const res = getProductFromOrder(orderId).then((data) => {
-			setProducts(data.data.products)
-		})
-	}, [version])
+		setOrderId(sessionStorage?.getItem('orderId'))
+	}, [])
+
+	useEffect(() => {
+		if (orderId) {
+			getProductFromOrder(orderId).then((data) => {
+				setProducts(data.data.products)
+				setTotalPrice(
+					data.data.products
+						.map(
+							(product: Product) =>
+								product.product_price * product.pivot.product_quantity
+						)
+						.reduce((acc: number, currentValue: number) => acc + currentValue)
+				)
+			})
+		}
+	}, [version, orderId])
 
 	const removeAllProductsHandler = () => {
 		setProductContext([])
 		setAddToCardContext(0)
 	}
-
-	return addToCardContext > 0 ? (
+	const test = async () => {
+		const res = await updateOrder(orderId, token)
+		console.log(res)
+	}
+	return products.length ? (
 		<section className={styles.cartConteiner}>
+			<button onClick={test}>Click</button>
 			<div className={styles.orderInfo}>
 				<div className={styles.cartTitle}>
 					<h2>Моє замовлення</h2>
@@ -39,6 +56,7 @@ export default function Cart() {
 						Очистити кошик
 					</h4>
 				</div>
+
 				<div className={styles.cartProducts}>
 					{products.map((product: Product) => (
 						<ProductCardForCart
@@ -62,7 +80,7 @@ export default function Cart() {
 						<p>Товари</p>
 						<p>Total price</p>
 					</div>
-					<h4 className={styles.cartTotalPrice}>Total price</h4>
+					<h4 className={styles.cartTotalPrice}>{totalPrice}</h4>
 					<button className={styles.cartBtn}>Замовити</button>
 				</form>
 			</div>
