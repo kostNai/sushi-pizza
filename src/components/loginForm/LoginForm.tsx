@@ -1,16 +1,12 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
-import styles from './LoginForm.module.scss'
-import {
-	errorsContext,
-	useLoginContext,
-	userContext
-} from '../../context/userContext'
-import { redirect, useRouter } from 'next/navigation'
-import { login } from '../../utils/api/fetchLogin'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { PiWarningCircle } from 'react-icons/pi'
+import styles from './LoginForm.module.scss'
+import { errorsContext, useLoginContext } from '@/context/userContext'
+import { login } from '@/utils/api/fetchLogin'
 
 export default function LoginForm() {
 	const [userLogin, setUserLogin] = useState<string | undefined>('')
@@ -34,25 +30,7 @@ export default function LoginForm() {
 					const arrayToken = token.split('.')
 					const tokenPayload = JSON.parse(atob(arrayToken[1]))
 					setLoginContext(tokenPayload.login)
-					const role = tokenPayload.role
 					router.push('/')
-					// if (role) {
-					// 	switch (role) {
-					// 		case 'root':
-					// 			router.push('/admin')
-					// 			break
-					// 		case 'admin':
-					// 			router.push('/admin')
-					// 			break
-
-					// 		case 'user':
-					// 			router.push('/profile')
-					// 			break
-
-					// 		default:
-					// 			break
-					// 	}
-					// }
 				}
 			})
 			.catch((err) => {

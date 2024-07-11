@@ -5,7 +5,6 @@ import { CiCircleRemove } from 'react-icons/ci'
 
 import { Product } from '../../app/types/Product'
 import styles from './ProductCardForCart.module.scss'
-// import { orderIdContext } from '@/src/context/userContext'
 import { addToCart } from '@/src/utils/api/addToCart'
 import { removeFromCart } from '@/src/utils/api/removeFromCart'
 import { deleteFromCart } from '@/src/utils/api/deleteFromCart'

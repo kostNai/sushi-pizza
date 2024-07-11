@@ -1,25 +1,34 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import ProductCardForCart from '../../components/productCardForCart/ProductCardForCart'
-import { useBasketContext, useProductContext } from '../../context/userContext'
+import ProductCardForCart from '@/components/productCardForCart/ProductCardForCart'
+import {
+	useBasketContext,
+	useProductContext,
+	errorsContext,
+	isCartOpenContext
+} from '@/context/userContext'
 import { Product } from '../types/Product'
 import styles from './styles.module.scss'
-import { useEffect, useState } from 'react'
 import { getProductFromOrder } from '@/src/utils/api/getProductsFromOrder'
 import { updateOrder } from '@/src/utils/api/updateOrder'
+import { deleteOrder } from '@/src/utils/api/deleteOrder'
 
 export default function Cart() {
-	const token = localStorage.getItem('token')
 	const [productContext, setProductContext] = useProductContext()
 	const [addToCardContext, setAddToCardContext] = useBasketContext()
+	const [isCartOpen, setIsCartOpen] = isCartOpenContext()
+	const [error, setError] = errorsContext()
 	const [products, setProducts] = useState<Product[] | undefined>([])
 	const [orderId, setOrderId] = useState<string | undefined>('')
 	const [version, setVersion] = useState(0)
 	const [totalPrice, setTotalPrice] = useState(0)
+	const [token, setToken] = useState('')
 
 	useEffect(() => {
 		setOrderId(sessionStorage?.getItem('orderId'))
+		setToken(localStorage.getItem('token'))
 	}, [])
 
 	useEffect(() => {
@@ -38,21 +47,34 @@ export default function Cart() {
 		}
 	}, [version, orderId])
 
-	const removeAllProductsHandler = () => {
-		setProductContext([])
-		setAddToCardContext(0)
+	const updateOrderHandler = async () => {
+		try {
+			const res = await updateOrder(orderId, token)
+			if (res.status === 200) {
+				return res.data
+			}
+		} catch (error) {
+			setError(error.message)
+		}
 	}
-	const test = async () => {
-		const res = await updateOrder(orderId, token)
-		console.log(res)
+	const deleteOrderHandler = async () => {
+		const res = await deleteOrder(orderId)
+		if (res.status === 200) {
+			setOrderId(null)
+			sessionStorage.removeItem('orderId')
+			setProductContext([])
+			setAddToCardContext(0)
+			setVersion(version + 1)
+			setIsCartOpen(false)
+			return res
+		}
 	}
-	return products.length ? (
+	return orderId ? (
 		<section className={styles.cartConteiner}>
-			<button onClick={test}>Click</button>
 			<div className={styles.orderInfo}>
 				<div className={styles.cartTitle}>
 					<h2>Моє замовлення</h2>
-					<h4 className={styles.clearCart} onClick={removeAllProductsHandler}>
+					<h4 className={styles.clearCart} onClick={deleteOrderHandler}>
 						Очистити кошик
 					</h4>
 				</div>

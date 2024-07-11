@@ -1,14 +1,11 @@
 'use client'
 
 import React, { Suspense, useEffect, useState } from 'react'
-import { getProducts } from '../../../../utils/api/getProducts'
-import { Product } from '../../../types/Product'
-import SingleProductCard from '../../../../components/singleProductCard/SingleProductCard'
-import Loading from '../../../admin/loading'
-import {
-	useBasketContext,
-	useProductContext
-} from '../../../../context/userContext'
+import { getProducts } from '@/utils/api/getProducts'
+import { Product } from '@/types/Product'
+import SingleProductCard from '@/components/singleProductCard/SingleProductCard'
+
+import { useBasketContext, useProductContext } from '@/context/userContext'
 
 export default function Page({ params }: { params: { productId: string } }) {
 	const productId = params.productId

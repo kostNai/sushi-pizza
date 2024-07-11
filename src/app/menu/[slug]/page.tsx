@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Product } from '../../types/Product'
-import { Category } from '../../types/Category'
+import { Product } from '@/types/Product'
+import { Category } from '@/types/Category'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { getCategories } from '../../../utils/api/getCategories'
-import { getProductsByCategory } from '../../../utils/api/getProductssByCategory'
+import { getCategories } from '@/utils/api/getCategories'
+import { getProductsByCategory } from '@/utils/api/getProductssByCategory'
 import styles from './styles.module.scss'
-import ProductCard from '../../../components/productCard/ProductCard'
+import ProductCard from '@/components/productCard/ProductCard'
 import Link from 'next/link'
 
 export default function Page({ params }: { params: { slug: string } }) {

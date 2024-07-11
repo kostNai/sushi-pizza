@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { getCategories } from '../../utils/api/getCategories'
-import { Category } from '../types/Category'
+import { getCategories } from '@/utils/api/getCategories'
+import { Category } from '@/types/Category'
 import styles from './styles.module.scss'
 import { usePathname } from 'next/navigation'
 
