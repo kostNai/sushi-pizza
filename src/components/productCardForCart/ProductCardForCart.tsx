@@ -9,15 +9,19 @@ import { addToCart } from '@/src/utils/api/addToCart'
 import { removeFromCart } from '@/src/utils/api/removeFromCart'
 import { deleteFromCart } from '@/src/utils/api/deleteFromCart'
 import { useBasketContext } from '@/src/context/userContext'
+import { useEffect, useRef, useState } from 'react'
 
 type Props = {
 	product: Product
 	version: number
 	setVersion: (version: number) => void
 }
+const ADD_CATEGORY = 'додаткові товари'
+
 const STICKS = 'Палички для їжі'
 const SAUCE = 'Соєвий соус'
 const BAG = 'Пакет'
+const WASABI = 'НАБІР ІМБИР ВАСАБІ 1 ПОРЦІЯ'
 export default function ProductCardForCart({
 	product,
 	version,
@@ -25,10 +29,13 @@ export default function ProductCardForCart({
 }: Props) {
 	const orderId = sessionStorage.getItem('orderId')
 	const [addToCardContext, setAddToCardContext] = useBasketContext()
+
 	const disabledItems =
 		(product.product_name.toLocaleLowerCase().match(STICKS.toLowerCase()) &&
 			product.pivot.product_quantity < 3) ||
 		(product.product_name.toLocaleLowerCase().match(SAUCE.toLowerCase()) &&
+			product.pivot.product_quantity < 3) ||
+		(product.product_name.toLocaleLowerCase().match(WASABI.toLowerCase()) &&
 			product.pivot.product_quantity < 3)
 
 	const addToOrderHandler = async (productId: string) => {
@@ -73,13 +80,22 @@ export default function ProductCardForCart({
 				<div className={styles.productCount}>
 					<FiMinus
 						size={25}
-						className={styles.changeProductCount}
+						className={
+							product.product_name !== 'ПАКЕТ'
+								? styles.changeProductCount
+								: styles.invisible
+						}
 						onClick={() => removeFromOrderHandler(product.id)}
 					/>
 					<p>{product.pivot.product_quantity}</p>
+
 					<GoPlus
 						size={25}
-						className={styles.changeProductCount}
+						className={
+							product.product_name !== 'ПАКЕТ'
+								? styles.changeProductCount
+								: styles.invisible
+						}
 						onClick={() => addToOrderHandler(product.id)}
 					/>
 				</div>
@@ -88,7 +104,13 @@ export default function ProductCardForCart({
 						<p className={styles.productFreePrice}>Безкоштовно</p>
 					) : (
 						<p className={styles.productPrice}>
-							{product.pivot.product_quantity * product.product_price} грн.
+							{product.category.category_name.toLowerCase() ===
+								ADD_CATEGORY.toLowerCase() &&
+							product.product_name.toLowerCase() !== BAG &&
+							product.pivot.product_quantity > 2
+								? (product.pivot.product_quantity - 2) * product.product_price
+								: product.pivot.product_quantity * product.product_price}{' '}
+							<span>грн.</span>
 						</p>
 					)}
 					<CiCircleRemove

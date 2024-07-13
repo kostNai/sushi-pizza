@@ -1,0 +1,66 @@
+.orderForm {
+	width: fit-content;
+	display: flex;
+	flex-direction: column;
+	box-shadow: #e4c59e 0px 1px 3px 0px, #e4c59e 0px 0px 0px 1px;
+	padding: 64px 32px;
+	label {
+		display: flex;
+		flex-direction: column;
+	}
+	input {
+		margin: 4px 0;
+		font-size: 20px;
+		padding: 8px 16px;
+		border: none;
+		border-radius: 5px;
+		// background: #803d3b;
+		box-shadow: #e4c59e 0px 1px 3px 0px, #e4c59e 0px 0px 0px 1px;
+		&:focus {
+			outline: none;
+			box-shadow: #e4c59e 0px 1px 3px 2px, #e4c59e 0px 0px 0px 2px;
+		}
+	}
+}
+.orderFormTitle {
+	border-bottom: 1px solid #e4c59e;
+}
+.orderFormDataContainer {
+	margin-top: 16px;
+	padding-bottom: 8px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	border-bottom: 1px solid #e4c59e;
+}
+.orderFormData {
+	display: flex;
+	gap: 32px;
+}
+.formOrderBtnContainer {
+	display: flex;
+	gap: 32px;
+	align-items: center;
+}
+.btn {
+	margin-top: 16px;
+	width: fit-content;
+	padding: 16px 32px;
+	font-size: 24px;
+	border: none;
+	border-radius: 7px;
+	box-shadow: #e4c59e 0px 1px 3px 0px, #e4c59e 0px 0px 0px 1px;
+	color: rgb(189, 52, 52);
+	cursor: pointer;
+	transition: 300ms;
+	&:hover {
+		box-shadow: #e4c59e 0px 1px 3px 3px, #e4c59e 0px 0px 0px 3px;
+	}
+	&:active {
+		scale: 0.9;
+	}
+}
+.orderFormLoginLink {
+	color: rgb(189, 52, 52);
+	text-decoration: underline;
+}

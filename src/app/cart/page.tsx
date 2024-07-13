@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import ProductCardForCart from '@/components/productCardForCart/ProductCardForCart'
 import {
@@ -14,7 +14,10 @@ import styles from './styles.module.scss'
 import { getProductFromOrder } from '@/src/utils/api/getProductsFromOrder'
 import { updateOrder } from '@/src/utils/api/updateOrder'
 import { deleteOrder } from '@/src/utils/api/deleteOrder'
+import { useRouter, usePathname } from 'next/navigation'
 
+const ADD_CATEGORY = 'додаткові товари'
+const BAG = 'пакет'
 export default function Cart() {
 	const [productContext, setProductContext] = useProductContext()
 	const [addToCardContext, setAddToCardContext] = useBasketContext()
@@ -25,6 +28,8 @@ export default function Cart() {
 	const [version, setVersion] = useState(0)
 	const [totalPrice, setTotalPrice] = useState(0)
 	const [token, setToken] = useState('')
+	const router = useRouter()
+	const pathName = usePathname()
 
 	useEffect(() => {
 		setOrderId(sessionStorage?.getItem('orderId'))
@@ -35,12 +40,31 @@ export default function Cart() {
 		if (orderId) {
 			getProductFromOrder(orderId).then((data) => {
 				setProducts(data.data.products)
+
 				setTotalPrice(
 					data.data.products
-						.map(
-							(product: Product) =>
-								product.product_price * product.pivot.product_quantity
-						)
+						.filter((product: Product) => {
+							return (
+								product.category.category_name.toLowerCase() !==
+									ADD_CATEGORY.toLowerCase() ||
+								product.product_name.toLowerCase() === BAG ||
+								product.pivot.product_quantity > 2
+							)
+						})
+						.map((product: Product) => {
+							let sum: number = 0
+							if (
+								product.category.category_name.toLowerCase() ===
+									ADD_CATEGORY.toLowerCase() &&
+								product.product_name.toLowerCase() !== BAG &&
+								product.pivot.product_quantity > 2
+							) {
+								sum +=
+									product.product_price * (product.pivot.product_quantity - 2)
+							} else
+								sum += product.product_price * product.pivot.product_quantity
+							return sum
+						})
 						.reduce((acc: number, currentValue: number) => acc + currentValue)
 				)
 			})
@@ -69,6 +93,11 @@ export default function Cart() {
 			return res
 		}
 	}
+
+	const onSubmitHandler = (e: FormEvent) => {
+		e.preventDefault()
+		router.push(`${pathName}/confirm-order`)
+	}
 	return orderId ? (
 		<section className={styles.cartConteiner}>
 			<div className={styles.orderInfo}>
@@ -91,7 +120,7 @@ export default function Cart() {
 				</div>
 			</div>
 			<div className={styles.orderTotal}>
-				<form className={styles.cartForm}>
+				<form className={styles.cartForm} onSubmit={onSubmitHandler}>
 					<input
 						type="text"
 						name="promo"
@@ -100,10 +129,12 @@ export default function Cart() {
 					/>
 					<div className={styles.cartText}>
 						<p>Товари</p>
-						<p>Total price</p>
+						<p>{totalPrice} грн</p>
 					</div>
-					<h4 className={styles.cartTotalPrice}>{totalPrice}</h4>
-					<button className={styles.cartBtn}>Замовити</button>
+					<h4 className={styles.cartTotalPrice}>{totalPrice} грн</h4>
+					<button className={styles.cartBtn} type="submit">
+						Оформити {totalPrice}грн
+					</button>
 				</form>
 			</div>
 		</section>

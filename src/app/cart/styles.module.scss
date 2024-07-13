@@ -73,6 +73,7 @@
 	border: none;
 	border-radius: 5px;
 	box-shadow: #e4c59e 0px 1px 3px 0px, #e4c59e 0px 0px 0px 1px;
+	background-color: rgb(189, 52, 52);
 	cursor: pointer;
 	transition: 300ms;
 
@@ -102,4 +103,8 @@
 			color: rgb(248, 93, 93);
 		}
 	}
+}
+.cartTotalPrice {
+	font-size: 32px;
+	color: rgb(248, 93, 93);
 }
